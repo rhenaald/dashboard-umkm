@@ -1,26 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfbf7;
+  --foreground: #2d1b10;
+
+  /* Primary Theme Colors: Warm Browns */
+  --warm-brown-50: #fdfbf7;
+  --warm-brown-100: #f8f1e5;
+  --warm-brown-200: #eedec8;
+  --warm-brown-300: #dec1a0;
+  --warm-brown-400: #c99e74;
+  --warm-brown-500: #b37d4e;
+  --warm-brown-600: #9e643b;
+  --warm-brown-700: #834f30;
+  --warm-brown-800: #6b3e28;
+  --warm-brown-900: #573322;
+  --warm-brown-950: #301b11;
+
+  --primary: var(--warm-brown-700);
+  --primary-hover: var(--warm-brown-800);
+  --secondary: var(--warm-brown-500);
+  --accent: #d97706;
+  /* amber-600 */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --font-sans: 'Outfit', sans-serif;
+
+  --color-warm-brown-50: var(--warm-brown-50);
+  --color-warm-brown-100: var(--warm-brown-100);
+  --color-warm-brown-200: var(--warm-brown-200);
+  --color-warm-brown-300: var(--warm-brown-300);
+  --color-warm-brown-400: var(--warm-brown-400);
+  --color-warm-brown-500: var(--warm-brown-500);
+  --color-warm-brown-600: var(--warm-brown-600);
+  --color-warm-brown-700: var(--warm-brown-700);
+  --color-warm-brown-800: var(--warm-brown-800);
+  --color-warm-brown-900: var(--warm-brown-900);
+  --color-warm-brown-950: var(--warm-brown-950);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #170d08;
+    --foreground: #f8f1e5;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism utility card styling */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-card {
+  background: rgba(48, 27, 17, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--warm-brown-100);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--warm-brown-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--warm-brown-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--warm-brown-500);
+}
+
+/* Leaflet maps custom fixes */
+.leaflet-container {
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--warm-brown-50) !important;
+  color: var(--warm-brown-950) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid var(--warm-brown-200);
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: var(--warm-brown-900) !important;
+  color: var(--warm-brown-50) !important;
+  border: 1px solid var(--warm-brown-800);
+}
+
+.leaflet-popup-tip {
+  background: var(--warm-brown-50) !important;
+}
+
+.dark .leaflet-popup-tip {
+  background: var(--warm-brown-900) !important;
 }

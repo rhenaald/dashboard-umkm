@@ -1,0 +1,31 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Umkm {
+  id               Int      @id @default(autoincrement())
+  nama             String   @db.VarChar(33)
+  nama_usaha       String   @db.VarChar(54)
+  produk           String   @db.VarChar(110)
+  kategori         String   @db.VarChar(66)
+  alamat           String?  @db.VarChar(71)
+  rt               Int
+  rw               Int
+  status_nib       String   @db.VarChar(14) // e.g., "Sudah NIB", "Belum NIB"
+  
+  // Extra columns to support dashboard metrics, mapping, and monitoring:
+  status_pelatihan String   @db.VarChar(20) // e.g., "Pernah", "Belum"
+  desil            Int      // 1 to 10
+  status_validasi  String   @db.VarChar(20) // e.g., "Cek Lapangan", "Perlu Cek"
+  kecamatan        String   @db.VarChar(33) // e.g., "Tawang"
+  tahun_laporan    Int      // e.g., 2024, 2025, 2026
+  latitude         Float    // For Leaflet map positioning
+  longitude        Float    // For Leaflet map positioning
+
+  @@map("umkm")
+}
