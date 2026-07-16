@@ -11,7 +11,7 @@ export default async function PetaPage() {
   const allUmkm = await getAllUmkm();
 
   return (
-    <div className="flex-1 bg-warm-brown-50 py-10 dark:bg-warm-brown-950 transition-colors duration-300">
+    <div className="flex-1 bg-white py-10 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Page Header */}

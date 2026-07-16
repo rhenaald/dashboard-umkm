@@ -18,8 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className="h-full scroll-smooth antialiased">
-      <body className="min-h-full flex flex-col bg-warm-brown-50 text-warm-brown-950 dark:bg-warm-brown-950 dark:text-warm-brown-50 transition-colors duration-300">
-        <Suspense fallback={<div className="h-16 bg-warm-brown-50 dark:bg-warm-brown-950 border-b border-warm-brown-200/50"></div>}>
+      <body className="min-h-full flex flex-col bg-white text-warm-brown-950 transition-colors duration-300">
+        <Suspense fallback={<div className="h-16 bg-white border-b border-warm-brown-200/50"></div>}>
           <Navbar />
         </Suspense>
 
@@ -29,18 +29,18 @@ export default function RootLayout({
         </main>
 
         {/* Premium Footer */}
-        <footer className="w-full border-t border-warm-brown-200 bg-warm-brown-100 py-6 dark:border-warm-brown-900 dark:bg-warm-brown-900/60 transition-colors duration-300">
+        <footer className="w-full border-t border-warm-brown-200 bg-warm-brown-100 py-6 transition-colors duration-300">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-bold tracking-wide text-warm-brown-800 dark:text-warm-brown-200">
+                <p className="text-sm font-bold tracking-wide text-warm-brown-800">
                   BAKUL KAHURIPAN
                 </p>
-                <p className="text-xs text-warm-brown-600 dark:text-warm-brown-400">
+                <p className="text-xs text-warm-brown-600">
                   Bantu Kelola Usaha Lokal Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya
                 </p>
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-warm-brown-600 dark:text-warm-brown-400">
+              <div className="flex items-center gap-1.5 text-xs text-warm-brown-600">
                 <span>Dibuat dengan</span>
                 <Heart size={14} className="text-red-500 fill-red-500 animate-pulse" />
                 <span>untuk kemajuan Ekonomi Lokal &copy; {new Date().getFullYear()}</span>

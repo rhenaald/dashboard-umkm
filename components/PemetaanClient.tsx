@@ -115,7 +115,7 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
             <span>Kuliner</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="block h-3.5 w-3.5 rounded-full bg-amber-500 border border-white"></span>
+            <span className="block h-3.5 w-3.5 rounded-full bg-warm-brown-500 border border-white"></span>
             <span>Sektor Lainnya</span>
           </div>
         </div>
@@ -171,7 +171,7 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
                       key={umkm.id}
                       onClick={() => handleRowClick(umkm)}
                       className={`cursor-pointer transition-colors ${isSelected
-                          ? 'bg-amber-50/90 text-amber-950 dark:bg-amber-950/20 dark:text-amber-250 font-bold border-l-4 border-l-amber-600'
+                          ? 'bg-warm-brown-100 text-warm-brown-950 dark:bg-warm-brown-950/40 dark:text-warm-brown-250 font-bold border-l-4 border-l-warm-brown-700'
                           : 'hover:bg-warm-brown-50 dark:hover:bg-warm-brown-900/60 text-warm-brown-750 dark:text-warm-brown-300'
                         }`}
                     >
@@ -194,7 +194,7 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
                       <td className="px-4 py-3.5">
                         <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_nib === 'Sudah NIB'
                             ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
-                            : 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300'
+                            : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
                           }`}>
                           {umkm.status_nib}
                         </span>

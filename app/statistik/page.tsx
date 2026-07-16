@@ -40,8 +40,8 @@ export default async function StatistikPage() {
       value: totalUmkm,
       desc: 'Usaha mikro, kecil, dan menengah',
       icon: Store,
-      colorClass: 'bg-warm-brown-700 text-warm-brown-50',
-      iconColorClass: 'bg-warm-brown-850 text-warm-brown-100',
+      colorClass: 'bg-white text-warm-brown-950 border border-warm-brown-200',
+      iconColorClass: 'bg-warm-brown-100 text-warm-brown-700',
     },
     {
       title: 'Kategori Usaha Dominan',
@@ -49,7 +49,7 @@ export default async function StatistikPage() {
       desc: `${topCategoryCount} usaha di bidang ini`,
       icon: TrendingUp,
       colorClass: 'bg-white text-warm-brown-950 border border-warm-brown-200 dark:bg-warm-brown-900 dark:border-warm-brown-850 dark:text-warm-brown-50',
-      iconColorClass: 'bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400',
+      iconColorClass: 'bg-warm-brown-100 text-warm-brown-700 dark:bg-warm-brown-900 dark:text-warm-brown-300',
     },
     {
       title: 'UMKM Ber-NIB',
@@ -65,12 +65,12 @@ export default async function StatistikPage() {
       desc: `${Math.round((totalTrained / (totalUmkm || 1)) * 100)}% pelaku usaha terlatih`,
       icon: GraduationCap,
       colorClass: 'bg-white text-warm-brown-950 border border-warm-brown-200 dark:bg-warm-brown-900 dark:border-warm-brown-850 dark:text-warm-brown-50',
-      iconColorClass: 'bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400',
+      iconColorClass: 'bg-warm-brown-100 text-warm-brown-700 dark:bg-warm-brown-900 dark:text-warm-brown-300',
     },
   ];
 
   return (
-    <div className="flex-1 bg-warm-brown-50 py-10 dark:bg-warm-brown-950 transition-colors duration-300">
+    <div className="flex-1 bg-white py-10 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Page Header */}

@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+@custom-variant dark (.never-dark);
 @import "leaflet/dist/leaflet.css";
 
 
 :root {
-  --background: #fdfbf7;
+  --background: #ffffff;
   --foreground: #2d1b10;
 
   /* Primary Theme Colors: Warm Browns */
-  --warm-brown-50: #fdfbf7;
+  --warm-brown-50: #ffffff;
   --warm-brown-100: #f8f1e5;
   --warm-brown-200: #eedec8;
   --warm-brown-300: #dec1a0;
@@ -23,8 +24,7 @@
   --primary: var(--warm-brown-700);
   --primary-hover: var(--warm-brown-800);
   --secondary: var(--warm-brown-500);
-  --accent: #d97706;
-  /* amber-600 */
+  --accent: var(--warm-brown-500);
 }
 
 @theme {
@@ -43,13 +43,6 @@
   --color-warm-brown-950: var(--warm-brown-950);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #170d08;
-    --foreground: #f8f1e5;
-  }
-}
-
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -63,12 +56,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.dark .glass-card {
-  background: rgba(48, 27, 17, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
@@ -77,10 +64,6 @@ body {
 
 ::-webkit-scrollbar-track {
   background: var(--warm-brown-100);
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: var(--warm-brown-950);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -105,16 +88,6 @@ body {
   border: 1px solid var(--warm-brown-200);
 }
 
-.dark .leaflet-popup-content-wrapper {
-  background: var(--warm-brown-900) !important;
-  color: var(--warm-brown-50) !important;
-  border: 1px solid var(--warm-brown-800);
-}
-
 .leaflet-popup-tip {
   background: var(--warm-brown-50) !important;
-}
-
-.dark .leaflet-popup-tip {
-  background: var(--warm-brown-900) !important;
 }

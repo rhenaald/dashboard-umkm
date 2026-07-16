@@ -15,7 +15,7 @@ function highlightText(text: string, query: string) {
     <span>
       {parts.map((part, i) =>
         regex.test(part)
-          ? <mark key={i} className="bg-amber-250 text-amber-950 font-semibold rounded px-0.5">{part}</mark>
+          ? <mark key={i} className="bg-warm-brown-200 text-warm-brown-950 font-semibold rounded px-0.5">{part}</mark>
           : part
       )}
     </span>
@@ -52,7 +52,7 @@ export default async function Home(props: PageProps) {
   const trainingPercentage = Math.round((trainingCount / totalCount) * 100);
 
   return (
-    <div className="flex-1 bg-warm-brown-50 dark:bg-warm-brown-950 transition-colors duration-300">
+    <div className="flex-1 bg-white transition-colors duration-300">
 
       {/* Search Mode View */}
       {query ? (
@@ -88,8 +88,8 @@ export default async function Home(props: PageProps) {
                         {highlightText(umkm.kategori, query)}
                       </span>
                       <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${umkm.status_nib === 'Sudah NIB'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
-                          : 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
+                        : 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300'
                         }`}>
                         {umkm.status_nib}
                       </span>
@@ -152,25 +152,21 @@ export default async function Home(props: PageProps) {
         /* Standard Landing Page View */
         <div>
           {/* Hero Section */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-warm-brown-900 to-warm-brown-950 text-warm-brown-50 py-20 lg:py-28 px-4 sm:px-6 lg:px-8">
-            <div className="absolute inset-0 opacity-15">
-              <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                <defs>
-                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-              </svg>
-            </div>
+          <div className="relative overflow-hidden bg-warm-brown-950 py-20 lg:py-28 px-4 sm:px-6 lg:px-8 border-b border-warm-brown-900 text-white">
+            {/* Background Image with Overlay */}
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+              style={{ backgroundImage: "url('/hero-bg.png')" }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-warm-brown-950 via-warm-brown-950/75 to-transparent"></div>
 
             <div className="relative mx-auto max-w-7xl grid gap-12 lg:grid-cols-12 items-center">
               <div className="lg:col-span-7 flex flex-col space-y-6">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-warm-brown-850 px-3.5 py-1 text-xs font-semibold tracking-wide text-warm-brown-200 border border-warm-brown-800">
-                  <Award size={14} className="text-amber-500" />
+                <div className="w-fit inline-flex items-center gap-1.5 rounded-full bg-warm-brown-900/70 px-3.5 py-1 text-xs font-semibold tracking-wide text-warm-brown-200 border border-warm-brown-800 backdrop-blur-sm whitespace-nowrap">
+                  <Award size={14} className="text-warm-brown-400" />
                   Digitalisasi UMKM Mandiri Kelurahan Kahuripan
                 </div>
-                <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+                <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white">
                   BAKUL KAHURIPAN
                 </h1>
                 <p className="text-lg text-warm-brown-200/90 leading-relaxed max-w-xl">
@@ -179,14 +175,14 @@ export default async function Home(props: PageProps) {
                 <div className="flex flex-wrap gap-4 pt-2">
                   <Link
                     href="/statistik"
-                    className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-5 py-3 text-sm font-bold text-white hover:bg-amber-700 shadow-md transition-all hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 rounded-xl bg-warm-brown-700 px-5 py-3 text-sm font-bold text-white hover:bg-warm-brown-800 shadow-md transition-all hover:-translate-y-0.5"
                   >
                     Statistik Usaha
                     <ArrowRight size={16} />
                   </Link>
                   <Link
                     href="/peta"
-                    className="inline-flex items-center gap-2 rounded-xl border border-warm-brown-700 bg-warm-brown-900/60 px-5 py-3 text-sm font-bold hover:bg-warm-brown-900 shadow-md transition-all hover:-translate-y-0.5"
+                    className="inline-flex items-center gap-2 rounded-xl border border-warm-brown-750 bg-warm-brown-900/40 px-5 py-3 text-sm font-bold text-warm-brown-200 hover:bg-warm-brown-900 shadow-md transition-all hover:-translate-y-0.5"
                   >
                     Pemetaan Lokasi
                   </Link>
@@ -195,38 +191,37 @@ export default async function Home(props: PageProps) {
 
               {/* Graphic Profile Card */}
               <div className="lg:col-span-5 relative">
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-amber-500 to-warm-brown-500 opacity-30 blur-2xl"></div>
-                <div className="relative rounded-3xl border border-warm-brown-800 bg-warm-brown-900/80 p-8 backdrop-blur-md shadow-2xl">
-                  <h3 className="text-xl font-bold border-b border-warm-brown-800 pb-4 text-warm-brown-100 flex items-center gap-2">
-                    <Map size={20} className="text-amber-500" />
+                <div className="relative rounded-3xl border border-warm-brown-200 bg-white p-8 shadow-2xl backdrop-blur-md">
+                  <h3 className="text-xl font-bold border-b border-warm-brown-200 pb-4 text-warm-brown-900 flex items-center gap-2">
+                    <Map size={20} className="text-warm-brown-500" />
                     Profil Singkat Kelurahan
                   </h3>
-                  <div className="mt-6 space-y-4 text-sm text-warm-brown-300">
-                    <div className="flex justify-between items-center py-2 border-b border-warm-brown-800/40">
-                      <span className="font-medium">Kecamatan:</span>
-                      <span className="text-warm-brown-100 font-semibold">Tawang</span>
+                  <div className="mt-6 space-y-4 text-sm text-warm-brown-600">
+                    <div className="flex justify-between items-center py-2 border-b border-warm-brown-200/60">
+                      <span className="font-medium text-warm-brown-600">Kecamatan:</span>
+                      <span className="text-warm-brown-900 font-semibold">Tawang</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-warm-brown-800/40">
-                      <span className="font-medium">Kota:</span>
-                      <span className="text-warm-brown-100 font-semibold">Tasikmalaya</span>
+                    <div className="flex justify-between items-center py-2 border-b border-warm-brown-200/60">
+                      <span className="font-medium text-warm-brown-600">Kota:</span>
+                      <span className="text-warm-brown-900 font-semibold">Tasikmalaya</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-warm-brown-800/40">
-                      <span className="font-medium">Penduduk:</span>
-                      <span className="text-warm-brown-100 font-semibold">~15.420 Jiwa (2025)</span>
+                    <div className="flex justify-between items-center py-2 border-b border-warm-brown-200/60">
+                      <span className="font-medium text-warm-brown-600">Penduduk:</span>
+                      <span className="text-warm-brown-900 font-semibold">~15.420 Jiwa (2025)</span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <span className="font-medium">Peta Wilayah Admin:</span>
-                      <span className="text-amber-400 font-semibold">Telah Terpetakan (100%)</span>
+                      <span className="font-medium text-warm-brown-600">Peta Wilayah Admin:</span>
+                      <span className="text-warm-brown-500 font-semibold">Telah Terpetakan (100%)</span>
                     </div>
                   </div>
                   <div className="mt-6 flex gap-3">
-                    <div className="flex-1 bg-warm-brown-950/60 p-3 rounded-2xl text-center border border-warm-brown-800/60">
-                      <span className="block text-2xl font-black text-amber-500">{totalCount}</span>
-                      <span className="text-[10px] text-warm-brown-400 uppercase tracking-wide font-bold">Total UMKM</span>
+                    <div className="flex-1 bg-warm-brown-50 p-3 rounded-2xl text-center border border-warm-brown-200">
+                      <span className="block text-2xl font-black text-warm-brown-500">{totalCount}</span>
+                      <span className="text-[10px] text-warm-brown-500 uppercase tracking-wide font-bold">Total UMKM</span>
                     </div>
-                    <div className="flex-1 bg-warm-brown-950/60 p-3 rounded-2xl text-center border border-warm-brown-800/60">
-                      <span className="block text-2xl font-black text-amber-500">{nibPercentage}%</span>
-                      <span className="text-[10px] text-warm-brown-400 uppercase tracking-wide font-bold">Memiliki NIB</span>
+                    <div className="flex-1 bg-warm-brown-50 p-3 rounded-2xl text-center border border-warm-brown-200">
+                      <span className="block text-2xl font-black text-warm-brown-500">{nibPercentage}%</span>
+                      <span className="text-[10px] text-warm-brown-500 uppercase tracking-wide font-bold">Memiliki NIB</span>
                     </div>
                   </div>
                 </div>
@@ -254,7 +249,7 @@ export default async function Home(props: PageProps) {
 
                 {/* Stenciled Administrative SVG Map */}
                 <div className="relative h-64 rounded-3xl bg-warm-brown-100/50 border border-warm-brown-200 flex items-center justify-center p-4 overflow-hidden dark:bg-warm-brown-900/20 dark:border-warm-brown-850">
-                  <div className="absolute top-4 left-4 text-xs font-bold bg-warm-brown-750 text-warm-brown-100 rounded px-2.5 py-1 z-10 shadow-sm">
+                  <div className="absolute top-4 left-4 text-xs font-bold bg-warm-brown-950 text-warm-brown-100 rounded px-2.5 py-1 z-10 shadow-sm">
                     KAHURIPAN ADMINISTRATIVE MAP
                   </div>
 
@@ -331,7 +326,7 @@ export default async function Home(props: PageProps) {
                       </div>
                       <div className="relative h-4 w-full rounded-full bg-warm-brown-100 dark:bg-warm-brown-800 overflow-hidden shadow-inner">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-warm-brown-500 to-green-600 transition-all duration-1000"
+                          className="h-full rounded-full bg-green-600 transition-all duration-1000"
                           style={{ width: `${nibPercentage}%` }}
                         ></div>
                       </div>
@@ -345,14 +340,14 @@ export default async function Home(props: PageProps) {
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm font-semibold">
                         <span className="flex items-center gap-1.5 text-warm-brown-800 dark:text-warm-brown-200">
-                          <GraduationCap size={16} className="text-amber-600 dark:text-amber-500" />
+                          <GraduationCap size={16} className="text-warm-brown-600 dark:text-warm-brown-400" />
                           Peserta Pelatihan Digitalisasi & Keuangan
                         </span>
                         <span className="text-warm-brown-900 dark:text-warm-brown-150 font-bold">{trainingPercentage}%</span>
                       </div>
                       <div className="relative h-4 w-full rounded-full bg-warm-brown-100 dark:bg-warm-brown-800 overflow-hidden shadow-inner">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-warm-brown-550 to-amber-600 transition-all duration-1000"
+                          className="h-full rounded-full bg-gradient-to-r from-warm-brown-550 to-warm-brown-700 transition-all duration-1000"
                           style={{ width: `${trainingPercentage}%` }}
                         ></div>
                       </div>
@@ -366,7 +361,7 @@ export default async function Home(props: PageProps) {
                   <div className="mt-8 pt-6 border-t border-warm-brown-100 dark:border-warm-brown-850 flex justify-end">
                     <Link
                       href="/statistik"
-                      className="text-xs font-bold text-amber-600 dark:text-amber-500 hover:text-amber-700 flex items-center gap-1 group"
+                      className="text-xs font-bold text-warm-brown-700 dark:text-warm-brown-400 hover:text-warm-brown-800 flex items-center gap-1 group"
                     >
                       Buka Dashboard Statistik Lengkap
                       <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -388,7 +383,7 @@ export default async function Home(props: PageProps) {
                       <span className="relative text-[10px] font-bold tracking-wide uppercase">Kuliner</span>
                     </div>
 
-                    <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-warm-brown-500 to-amber-700 flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300">
+                    <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-warm-brown-500 to-warm-brown-850 flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300">
                       <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors"></div>
                       <Briefcase size={18} className="absolute top-3 right-3 text-warm-brown-200" />
                       <span className="relative text-[10px] font-bold tracking-wide uppercase">Kerajinan</span>
@@ -407,7 +402,7 @@ export default async function Home(props: PageProps) {
           </div>
 
           {/* Module Nav Grid Section */}
-          <div className="bg-warm-brown-100 border-t border-b border-warm-brown-200/50 py-16 dark:bg-warm-brown-900/20 dark:border-warm-brown-850">
+          <div className="bg-white border-t border-b border-warm-brown-200/50 py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="text-center max-w-xl mx-auto">
                 <h2 className="text-3xl font-extrabold text-warm-brown-900 dark:text-warm-brown-100">
@@ -425,10 +420,10 @@ export default async function Home(props: PageProps) {
                   href="/statistik"
                   className="group rounded-2xl border border-warm-brown-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors dark:bg-amber-950/20 dark:text-amber-400">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
                     <TrendingUp size={22} />
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                     Dashboard Statistik
                   </h3>
                   <p className="mt-2 text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
@@ -457,10 +452,10 @@ export default async function Home(props: PageProps) {
                   href="/publik"
                   className="group rounded-2xl border border-warm-brown-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors dark:bg-amber-950/20 dark:text-amber-400">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
                     <Landmark size={22} />
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                     Portal Layanan Publik
                   </h3>
                   <p className="mt-2 text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">

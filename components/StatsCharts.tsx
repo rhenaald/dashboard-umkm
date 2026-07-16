@@ -59,7 +59,7 @@ export default function StatsCharts({ data }: StatsChartsProps) {
   // Custom Warm-Brown Colors
   const COLORS_CATEGORIES = ['#834f30', '#a1653e', '#b37d4e', '#c99e74', '#eedec8'];
   const COLORS_NIB = ['#15803d', '#b37d4e']; // green-700 & warm-brown-500
-  const COLORS_TRAINING = ['#d97706', '#eedec8']; // amber-600 & warm-brown-200
+  const COLORS_TRAINING = ['#b37d4e', '#eedec8']; // warm-brown-500 & warm-brown-200
 
   // Custom Tooltip Renderer
   const CustomTooltip = ({ active, payload }: any) => {
@@ -68,7 +68,7 @@ export default function StatsCharts({ data }: StatsChartsProps) {
         <div className="bg-white border border-warm-brown-200 rounded-xl p-3 shadow-md dark:bg-warm-brown-900 dark:border-warm-brown-850">
           <p className="text-sm font-bold text-warm-brown-900 dark:text-warm-brown-100">{payload[0].name}</p>
           <p className="text-xs font-semibold text-warm-brown-700 dark:text-warm-brown-300 mt-1">
-            Jumlah: <span className="text-amber-600 dark:text-amber-500 font-extrabold">{payload[0].value} UMKM</span>
+            Jumlah: <span className="text-warm-brown-600 dark:text-warm-brown-400 font-extrabold">{payload[0].value} UMKM</span>
           </p>
         </div>
       );

@@ -95,7 +95,7 @@ export default function LeafletMap({ umkmList, activeCenter, activeZoom, selecte
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       umkm.status_nib === 'Sudah NIB' 
                         ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' 
-                        : 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300'
+                        : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
                     }`}>
                       {umkm.status_nib}
                     </span>

@@ -136,7 +136,7 @@ export default function LayananPublikPage() {
   );
 
   return (
-    <div className="flex-1 bg-warm-brown-50 py-10 dark:bg-warm-brown-950 transition-colors duration-300">
+    <div className="flex-1 bg-white py-10 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Page Header */}
@@ -162,11 +162,11 @@ export default function LayananPublikPage() {
             rel="noopener noreferrer"
             className="group rounded-3xl border border-warm-brown-250 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 dark:border-warm-brown-850 dark:bg-warm-brown-900/60 flex items-start gap-4"
           >
-            <div className="p-3 rounded-2xl bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors dark:bg-amber-950/20 dark:text-amber-400">
+            <div className="p-3 rounded-2xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
               <Building2 size={24} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+              <h3 className="text-sm font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                 Pendaftaran NIB (OSS RBA)
               </h3>
               <p className="mt-2 text-xs text-warm-brown-650 dark:text-warm-brown-400 leading-relaxed">
@@ -200,11 +200,11 @@ export default function LayananPublikPage() {
             href="#complaint-section"
             className="group rounded-3xl border border-warm-brown-250 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 dark:border-warm-brown-850 dark:bg-warm-brown-900/60 flex items-start gap-4"
           >
-            <div className="p-3 rounded-2xl bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors dark:bg-amber-950/20 dark:text-amber-400">
+            <div className="p-3 rounded-2xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
               <HeartHandshake size={24} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+              <h3 className="text-sm font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                 Layanan Pengaduan UMKM
               </h3>
               <p className="mt-2 text-xs text-warm-brown-650 dark:text-warm-brown-400 leading-relaxed">
@@ -256,7 +256,7 @@ export default function LayananPublikPage() {
                       className="border border-warm-brown-100 rounded-2xl p-4 bg-warm-brown-50/50 hover:bg-warm-brown-50 transition-colors dark:border-warm-brown-800 dark:bg-warm-brown-950/30 dark:hover:bg-warm-brown-900/50"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-amber-600 dark:text-amber-500 uppercase tracking-wide bg-amber-50 dark:bg-amber-950/30 px-2 py-0.5 rounded-md">
+                        <span className="text-xs font-black text-warm-brown-700 dark:text-warm-brown-300 uppercase tracking-wide bg-warm-brown-100 dark:bg-warm-brown-950 px-2 py-0.5 rounded-md">
                           KBLI {kbli.code}
                         </span>
                         <span className="text-[10px] font-bold text-warm-brown-500 dark:text-warm-brown-400">Mikro &amp; Kecil</span>
@@ -392,17 +392,17 @@ export default function LayananPublikPage() {
             <div className="bg-white border border-warm-brown-200 rounded-3xl shadow-sm dark:bg-warm-brown-900 dark:border-warm-brown-850 h-[620px] flex flex-col justify-between overflow-hidden">
 
               {/* Chat Title bar */}
-              <div className="bg-gradient-to-r from-warm-brown-800 to-warm-brown-950 p-4 text-warm-brown-50 border-b border-warm-brown-900 flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-warm-brown-700/50 flex items-center justify-center border border-warm-brown-500/20 text-warm-brown-100 shadow-inner">
-                  <MessageSquare size={22} className="text-amber-500 animate-pulse" />
+              <div className="bg-warm-brown-100 p-4 text-warm-brown-900 border-b border-warm-brown-200 flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-warm-brown-200 flex items-center justify-center border border-warm-brown-300 text-warm-brown-700 shadow-inner">
+                  <MessageSquare size={22} className="text-warm-brown-600 animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold tracking-wide">
+                  <h3 className="text-sm font-bold tracking-wide text-warm-brown-900">
                     Asisten Virtual BAKUL
                   </h3>
                   <div className="flex items-center gap-1">
                     <span className="block h-2 w-2 rounded-full bg-green-500 animate-ping"></span>
-                    <span className="text-[10px] text-warm-brown-300 font-bold uppercase">Online / Siap Membantu</span>
+                    <span className="text-[10px] text-warm-brown-500 font-bold uppercase">Online / Siap Membantu</span>
                   </div>
                 </div>
               </div>
@@ -439,7 +439,7 @@ export default function LayananPublikPage() {
                               href={link.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 font-bold text-amber-600 hover:text-amber-800 hover:underline dark:text-amber-500 dark:hover:text-amber-400"
+                              className="inline-flex items-center gap-1 font-bold text-warm-brown-700 hover:text-warm-brown-850 hover:underline dark:text-warm-brown-400 dark:hover:text-warm-brown-300"
                             >
                               <CheckCircle2 size={12} className="text-green-500" />
                               {link.label}

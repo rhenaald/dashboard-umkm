@@ -119,7 +119,7 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
           <p className="text-sm font-extrabold text-warm-brown-900 dark:text-warm-brown-100">{data.name}</p>
           <p className={`text-[10px] font-bold ${statusColor} mt-0.5`}>{desilStatus}</p>
           <p className="text-xs font-bold text-warm-brown-750 dark:text-warm-brown-300 mt-1.5 border-t pt-1.5 dark:border-warm-brown-800">
-            Jumlah: <span className="font-black text-amber-600 dark:text-amber-500">{data.value} UMKM</span>
+            Jumlah: <span className="font-black text-warm-brown-700 dark:text-warm-brown-400">{data.value} UMKM</span>
           </p>
         </div>
       );
@@ -170,7 +170,7 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
 
         <button
           onClick={() => { setSelectedKecamatan(''); setSelectedYear(''); }}
-          className="text-xs font-bold text-amber-600 dark:text-amber-500 hover:underline self-end md:self-center"
+          className="text-xs font-bold text-warm-brown-700 dark:text-warm-brown-400 hover:underline self-end md:self-center"
         >
           Reset Filter Laporan
         </button>

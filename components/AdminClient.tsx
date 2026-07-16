@@ -290,13 +290,13 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_nib === 'Sudah NIB' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'
+                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_nib === 'Sudah NIB' ? 'bg-green-100 text-green-800' : 'bg-warm-brown-100 text-warm-brown-800'
                       }`}>
                       {umkm.status_nib}
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_pelatihan === 'Pernah' ? 'bg-amber-100 text-amber-800' : 'bg-warm-brown-100 text-warm-brown-850'
+                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_pelatihan === 'Pernah' ? 'bg-warm-brown-100 text-warm-brown-800' : 'bg-warm-brown-100 text-warm-brown-850'
                       }`}>
                       {umkm.status_pelatihan} Pelatihan
                     </span>
@@ -361,12 +361,12 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
           <div className="bg-white rounded-3xl border border-warm-brown-200 max-w-2xl w-full shadow-2xl overflow-hidden dark:bg-warm-brown-900 dark:border-warm-brown-850 animate-fadeIn">
 
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-warm-brown-800 to-warm-brown-900 p-5 text-white flex items-center justify-between">
-              <h3 className="font-extrabold text-sm tracking-wide uppercase flex items-center gap-1.5">
+            <div className="bg-warm-brown-100 p-5 text-warm-brown-900 border-b border-warm-brown-200 flex items-center justify-between">
+              <h3 className="font-extrabold text-sm tracking-wide uppercase flex items-center gap-1.5 text-warm-brown-800">
                 <Sliders size={16} />
                 {modalMode === 'create' ? 'Daftarkan UMKM Baru' : 'Perbarui Data UMKM'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-white/80 hover:text-white">
+              <button onClick={() => setIsModalOpen(false)} className="text-warm-brown-500 hover:text-warm-brown-800 transition-colors">
                 <X size={20} />
               </button>
             </div>
