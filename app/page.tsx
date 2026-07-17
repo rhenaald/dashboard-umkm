@@ -376,23 +376,32 @@ export default async function Home(props: PageProps) {
                   </h4>
 
                   <div className="mt-4 grid grid-cols-3 gap-3">
-                    {/* Simulated premium image tiles with gradients and icons */}
-                    <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-warm-brown-600 to-warm-brown-800 flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300">
-                      <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors"></div>
-                      <Store size={18} className="absolute top-3 right-3 text-warm-brown-200" />
-                      <span className="relative text-[10px] font-bold tracking-wide uppercase">Kuliner</span>
+                    {/* Premium image tiles referencing generated photos */}
+                    <div
+                      className="relative aspect-square rounded-2xl bg-cover bg-center bg-no-repeat flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300"
+                      style={{ backgroundImage: "url('/gallery-kuliner.png')" }}
+                    >
+                      <div className="absolute inset-0 bg-black/35 group-hover:bg-black/15 transition-colors duration-300"></div>
+                      <Store size={18} className="absolute top-3 right-3 text-white/90 z-10" />
+                      <span className="relative z-10 text-[10px] font-bold tracking-wide uppercase">Kuliner</span>
                     </div>
 
-                    <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-warm-brown-500 to-warm-brown-850 flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300">
-                      <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors"></div>
-                      <Briefcase size={18} className="absolute top-3 right-3 text-warm-brown-200" />
-                      <span className="relative text-[10px] font-bold tracking-wide uppercase">Kerajinan</span>
+                    <div
+                      className="relative aspect-square rounded-2xl bg-cover bg-center bg-no-repeat flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300"
+                      style={{ backgroundImage: "url('/gallery-kerajinan.png')" }}
+                    >
+                      <div className="absolute inset-0 bg-black/35 group-hover:bg-black/15 transition-colors duration-300"></div>
+                      <Briefcase size={18} className="absolute top-3 right-3 text-white/90 z-10" />
+                      <span className="relative z-10 text-[10px] font-bold tracking-wide uppercase">Kerajinan</span>
                     </div>
 
-                    <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-warm-brown-750 to-warm-brown-950 flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300">
-                      <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors"></div>
-                      <Award size={18} className="absolute top-3 right-3 text-warm-brown-200" />
-                      <span className="relative text-[10px] font-bold tracking-wide uppercase">Bordir Tasik</span>
+                    <div
+                      className="relative aspect-square rounded-2xl bg-cover bg-center bg-no-repeat flex flex-col justify-end p-3 text-white overflow-hidden shadow-sm group hover:-translate-y-0.5 transition-transform duration-300"
+                      style={{ backgroundImage: "url('/gallery-bordir.png')" }}
+                    >
+                      <div className="absolute inset-0 bg-black/35 group-hover:bg-black/15 transition-colors duration-300"></div>
+                      <Award size={18} className="absolute top-3 right-3 text-white/90 z-10" />
+                      <span className="relative z-10 text-[10px] font-bold tracking-wide uppercase">Bordir Tasik</span>
                     </div>
                   </div>
                 </div>

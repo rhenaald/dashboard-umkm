@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { Heart } from "lucide-react";
+import Footer from "@/components/Footer";
+import VirtualAssistant from "@/components/VirtualAssistant";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -29,25 +30,8 @@ export default function RootLayout({
         </main>
 
         {/* Premium Footer */}
-        <footer className="w-full border-t border-warm-brown-200 bg-warm-brown-100 py-6 transition-colors duration-300">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-bold tracking-wide text-warm-brown-800">
-                  BAKUL KAHURIPAN
-                </p>
-                <p className="text-xs text-warm-brown-600">
-                  Bantu Kelola Usaha Lokal Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya
-                </p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-warm-brown-600">
-                <span>Dibuat dengan</span>
-                <Heart size={14} className="text-red-500 fill-red-500 animate-pulse" />
-                <span>untuk kemajuan Ekonomi Lokal &copy; {new Date().getFullYear()}</span>
-              </div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
+        <VirtualAssistant />
       </body>
     </html>
   );

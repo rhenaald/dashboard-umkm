@@ -126,3 +126,27 @@ export async function updateValidasiStatus(id: number, status: 'Cek Lapangan' | 
 export async function updateNibStatus(id: number, status: 'Sudah NIB' | 'Belum NIB'): Promise<Umkm | null> {
   return updateUmkm(id, { status_nib: status });
 }
+
+export async function getAdminByUsername(username: string): Promise<any> {
+  if (prisma) {
+    try {
+      const dbAdmin = await (prisma as any).admin.findUnique({
+        where: { username }
+      });
+      return dbAdmin;
+    } catch (e) {
+      console.error("Prisma getAdminByUsername failed, falling back to mock:", e);
+    }
+  }
+  // Fallback for mock environment
+  if (username === 'admin') {
+    return {
+      id: 1,
+      username: 'admin',
+      password: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', // SHA-256 of 'admin123'
+      nama: 'Administrator BAKUL'
+    };
+  }
+  return null;
+}
+

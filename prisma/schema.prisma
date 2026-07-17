@@ -29,3 +29,13 @@ model Umkm {
 
   @@map("umkm")
 }
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(50)
+  password  String   @db.VarChar(255)
+  nama      String   @db.VarChar(50)
+  createdAt DateTime @default(now())
+
+  @@map("admin")
+}

@@ -91,3 +91,17 @@ body {
 .leaflet-popup-tip {
   background: var(--warm-brown-50) !important;
 }
+
+/* Gentle bounce animation for Virtual Assistant FAB */
+@keyframes bounce-short {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-bounce-short {
+  animation: bounce-short 3s infinite ease-in-out;
+}

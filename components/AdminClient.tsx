@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Umkm } from '@/app/utils/mockData';
 import {
   Plus, Edit, Trash2, Search, Filter,
   X, Check, AlertTriangle, ShieldCheck,
-  GraduationCap, Sliders, ChevronLeft, ChevronRight
+  GraduationCap, Sliders, ChevronLeft, ChevronRight, LogOut
 } from 'lucide-react';
 
 interface AdminClientProps {
@@ -13,11 +14,31 @@ interface AdminClientProps {
 }
 
 export default function AdminClient({ initialUmkmList }: AdminClientProps) {
+  const router = useRouter();
   const [umkmList, setUmkmList] = useState<Umkm[]>(initialUmkmList);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 15;
+
+  const handleLogout = async () => {
+    if (!confirm('Apakah Anda yakin ingin keluar dari panel admin?')) return;
+
+    try {
+      const res = await fetch('/api/auth/logout', {
+        method: 'POST'
+      });
+      if (res.ok) {
+        router.push('/login');
+        router.refresh();
+      } else {
+        alert('Gagal melakukan logout.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Terjadi kesalahan koneksi.');
+    }
+  };
 
   // Form State for Create / Edit
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -234,14 +255,25 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
 
         </div>
 
-        {/* Add Record Trigger */}
-        <button
-          onClick={handleOpenCreate}
-          className="rounded-xl bg-warm-brown-700 hover:bg-warm-brown-800 px-4 py-2 text-xs font-bold text-white shadow-sm flex items-center gap-1.5 transition-colors self-end md:self-center"
-        >
-          <Plus size={16} />
-          Tambah UMKM
-        </button>
+        <div className="flex gap-2 self-end md:self-center">
+          {/* Add Record Trigger */}
+          <button
+            onClick={handleOpenCreate}
+            className="rounded-xl bg-warm-brown-700 hover:bg-warm-brown-800 px-4 py-2 text-xs font-bold text-white shadow-sm flex items-center gap-1.5 transition-colors"
+          >
+            <Plus size={16} />
+            Tambah UMKM
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="rounded-xl border border-red-200 hover:bg-red-50 text-red-650 px-4 py-2 text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors dark:border-red-950 dark:hover:bg-red-950/20"
+          >
+            <LogOut size={14} />
+            Keluar
+          </button>
+        </div>
       </div>
 
       {/* Main Table View */}
