@@ -648,7 +648,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
       {/* Detail Modal */}
       {isDetailModalOpen && detailUmkm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-warm-brown-950/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden rounded-3xl bg-white shadow-2xl border border-warm-brown-200 dark:bg-warm-brown-900 dark:border-warm-brown-850">
+          <div className="w-full max-w-4xl max-h-[88vh] flex flex-col overflow-hidden rounded-3xl bg-white shadow-2xl border border-warm-brown-200 dark:bg-warm-brown-900 dark:border-warm-brown-850">
             {/* Modal Header */}
             <div className="shrink-0 bg-warm-brown-900 p-4 text-white flex items-center justify-between">
               <div className="flex items-center gap-2.5">
@@ -665,75 +665,80 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs text-warm-brown-800 dark:text-warm-brown-200">
+            {/* Modal Body: 2-Column Split View (Map on Right Side) */}
+            <div className="flex-1 overflow-y-auto p-5 md:p-6 grid grid-cols-1 md:grid-cols-12 gap-5 text-xs text-warm-brown-800 dark:text-warm-brown-200">
               
-              {/* Badges / Quick Metrics */}
-              <div className="flex flex-wrap items-center gap-2 border-b border-warm-brown-100 dark:border-warm-brown-850 pb-3">
-                <span className="px-2.5 py-0.5 rounded-full bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-800 dark:text-warm-brown-200 font-extrabold text-[10px] uppercase">
-                  {detailUmkm.kategori || 'Usaha'}
-                </span>
-                {detailUmkm.status_nib && (
-                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_nib === 'Sudah NIB' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'}`}>
-                    {detailUmkm.status_nib}
+              {/* Left Column (7 cols): Info & Metrics */}
+              <div className="md:col-span-7 space-y-4 flex flex-col justify-between">
+                
+                {/* Badges / Quick Metrics */}
+                <div className="flex flex-wrap items-center gap-2 border-b border-warm-brown-100 dark:border-warm-brown-850 pb-3">
+                  <span className="px-2.5 py-0.5 rounded-full bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-800 dark:text-warm-brown-200 font-extrabold text-[10px] uppercase">
+                    {detailUmkm.kategori || 'Usaha'}
                   </span>
-                )}
-                {detailUmkm.status_validasi && (
-                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_validasi === 'Cek Lapangan' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'}`}>
-                    Status Validasi: {detailUmkm.status_validasi}
-                  </span>
-                )}
+                  {detailUmkm.status_nib && (
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_nib === 'Sudah NIB' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'}`}>
+                      {detailUmkm.status_nib}
+                    </span>
+                  )}
+                  {detailUmkm.status_validasi && (
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_validasi === 'Cek Lapangan' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'}`}>
+                      Status Validasi: {detailUmkm.status_validasi}
+                    </span>
+                  )}
+                </div>
+
+                {/* Main Fields Grid */}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                    <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Produk Utama</span>
+                    <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.produk || '-'}</p>
+                  </div>
+                  <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                    <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Alamat Lengkap</span>
+                    <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.alamat || '-'}</p>
+                  </div>
+                  <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                    <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">RT / RW</span>
+                    <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.rt && detailUmkm.rw ? `RT ${detailUmkm.rt} / RW ${detailUmkm.rw}` : '-'}</p>
+                  </div>
+                  <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                    <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Kecamatan</span>
+                    <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.kecamatan || 'Tawang'}</p>
+                  </div>
+                  <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                    <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Desil Kesejahteraan</span>
+                    <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.desil ? `Desil ${detailUmkm.desil}` : '-'}</p>
+                  </div>
+                  <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                    <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Status Pelatihan</span>
+                    <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.status_pelatihan || '-'}</p>
+                  </div>
+                </div>
+
               </div>
 
-              {/* Main Fields Grid */}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
-                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Produk Utama</span>
-                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.produk || '-'}</p>
-                </div>
-                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
-                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Alamat Lengkap</span>
-                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.alamat || '-'}</p>
-                </div>
-                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
-                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">RT / RW</span>
-                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.rt && detailUmkm.rw ? `RT ${detailUmkm.rt} / RW ${detailUmkm.rw}` : '-'}</p>
-                </div>
-                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
-                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Kecamatan</span>
-                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.kecamatan || 'Tawang'}</p>
-                </div>
-                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
-                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Desil Kesejahteraan</span>
-                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.desil ? `Desil ${detailUmkm.desil}` : '-'}</p>
-                </div>
-                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
-                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Status Pelatihan</span>
-                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.status_pelatihan || '-'}</p>
-                </div>
-              </div>
-
-              {/* Embedded Google Maps View & Direct Link */}
-              <div className="space-y-2 border-t border-warm-brown-100 dark:border-warm-brown-850 pt-3">
+              {/* Right Column (5 cols): Embedded Google Maps View & Direct Link (Di Pinggir) */}
+              <div className="md:col-span-5 flex flex-col justify-between space-y-2.5 bg-warm-brown-50 dark:bg-warm-brown-950/60 p-3.5 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
                 <div className="flex items-center justify-between">
                   <span className="font-extrabold text-[11px] uppercase tracking-wider text-warm-brown-800 dark:text-warm-brown-200 flex items-center gap-1.5">
-                    <MapPin size={13} className="text-warm-brown-600 dark:text-warm-brown-400" />
-                    Peta Lokasi Google Maps
+                    <MapPin size={13} className="text-warm-brown-600 dark:text-warm-brown-400 animate-bounce" />
+                    Peta Google Maps
                   </span>
                   {detailUmkm.url && (
                     <a
                       href={detailUmkm.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 font-bold text-[11px] text-warm-brown-700 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:text-white underline"
+                      className="inline-flex items-center gap-1 font-bold text-[10px] text-warm-brown-700 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:text-white underline"
                     >
-                      <span>Buka di Google Maps</span>
+                      <span>Buka Maps</span>
                       <ExternalLink size={11} />
                     </a>
                   )}
                 </div>
 
-                <div className="h-[170px] sm:h-[190px] rounded-2xl overflow-hidden border border-warm-brown-200 dark:border-warm-brown-800 bg-warm-brown-100 dark:bg-warm-brown-950">
+                <div className="flex-1 min-h-[220px] rounded-xl overflow-hidden border border-warm-brown-200 dark:border-warm-brown-800 bg-warm-brown-100 dark:bg-warm-brown-950">
                   <iframe
                     title="Google Maps Location Detail"
                     width="100%"
