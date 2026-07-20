@@ -23,11 +23,40 @@ function truncate(str, maxLength) {
   return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
 }
 
+function detectKecamatan(item, defaultKec) {
+  const fullText = [
+    item.address,
+    item.neighborhood,
+    item.street,
+    item.title
+  ].filter(Boolean).join(' ').toLowerCase();
+
+  // Explicit kecamatan mentions in address
+  if (fullText.includes('kec. cihideung') || fullText.includes('kecamatan cihideung')) return 'Cihideung';
+  if (fullText.includes('kec. tawang') || fullText.includes('kecamatan tawang')) return 'Tawang';
+
+  // Kelurahan & area keywords in Cihideung vs Tawang
+  const cihideungKeywords = ['cihideung', 'tugujaya', 'tuguraja', 'cilembang', 'yudanagara', 'nagarawangi', 'argasari'];
+  const tawangKeywords = ['tawang', 'kahuripan', 'lengkongsari', 'cikalang', 'tawangsari', 'empangsari'];
+
+  const hasCihideung = cihideungKeywords.some(kw => fullText.includes(kw));
+  const hasTawang = tawangKeywords.some(kw => fullText.includes(kw));
+
+  if (hasCihideung && !hasTawang) return 'Cihideung';
+  if (hasTawang && !hasCihideung) return 'Tawang';
+
+  if (fullText.includes('cihideung')) return 'Cihideung';
+  if (fullText.includes('tawang')) return 'Tawang';
+
+  return defaultKec;
+}
+
 function processList(rawList, defaultKecamatan, startIdx) {
   return rawList.map((item, idx) => {
     const catName = item.categoryName || (item.categories && item.categories[0]) || '';
     const kategori = getKategori(catName, item.title);
     const alamatStr = item.street || item.address || '';
+    const exactKecamatan = detectKecamatan(item, defaultKecamatan);
     
     // Extract exact lat and lng from location object if available
     let lat = -7.3350;
@@ -51,7 +80,7 @@ function processList(rawList, defaultKecamatan, startIdx) {
       status_pelatihan: '',
       desil: 0,
       status_validasi: '',
-      kecamatan: defaultKecamatan,
+      kecamatan: exactKecamatan,
       tahun_laporan: 0,
       latitude: lat,
       longitude: lng,
@@ -64,7 +93,10 @@ const datasetTawang = processList(rawTawang, 'Tawang', 0);
 const datasetCihideung = processList(rawCihideung, 'Cihideung', datasetTawang.length);
 const combinedDataset = [...datasetTawang, ...datasetCihideung];
 
-console.log(`Processed: ${datasetTawang.length} Tawang entries, ${datasetCihideung.length} Cihideung entries. Total: ${combinedDataset.length}`);
+const totalTawang = combinedDataset.filter(i => i.kecamatan === 'Tawang').length;
+const totalCihideung = combinedDataset.filter(i => i.kecamatan === 'Cihideung').length;
+
+console.log(`Processed: Total ${combinedDataset.length} UMKM (Tawang: ${totalTawang}, Cihideung: ${totalCihideung})`);
 
 // Write to app/utils/mockData.ts
 const tsContent = `export interface Umkm {

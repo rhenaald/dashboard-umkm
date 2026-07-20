@@ -248,7 +248,7 @@ export default async function Home(props: PageProps) {
                 <div className="relative rounded-3xl overflow-hidden border border-warm-brown-200 bg-warm-brown-100/50 shadow-md group dark:bg-warm-brown-900/30 dark:border-warm-brown-850">
                   <div className="absolute top-4 left-4 z-10">
                     <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-warm-brown-950/90 text-warm-brown-100 rounded-xl px-3 py-1.5 backdrop-blur-md shadow-md">
-                      PETA ADMINISTRASI RESMI
+                      PETA ADMINISTRASI
                     </span>
                   </div>
 
