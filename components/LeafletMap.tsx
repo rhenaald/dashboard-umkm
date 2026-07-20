@@ -90,29 +90,43 @@ export default function LeafletMap({ umkmList, activeCenter, activeZoom, selecte
                 <div className="p-1 min-w-[200px]">
                   <div className="flex justify-between items-center gap-2">
                     <span className="text-[10px] font-extrabold uppercase tracking-wide px-2 py-0.5 rounded-full bg-warm-brown-100 dark:bg-warm-brown-800 text-warm-brown-800 dark:text-warm-brown-200">
-                      {umkm.kategori}
+                      {umkm.kategori || 'Usaha'}
                     </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      umkm.status_nib === 'Sudah NIB' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' 
-                        : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
-                    }`}>
-                      {umkm.status_nib}
-                    </span>
+                    {umkm.status_nib && (
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        umkm.status_nib === 'Sudah NIB' 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' 
+                          : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
+                      }`}>
+                        {umkm.status_nib}
+                      </span>
+                    )}
                   </div>
                   
                   <h4 className="font-bold text-sm text-warm-brown-900 dark:text-warm-brown-100 mt-2 leading-snug">
                     {umkm.nama_usaha}
                   </h4>
-                  <p className="text-xs text-warm-brown-600 dark:text-warm-brown-400 mt-0.5 font-semibold">
-                    Pemilik: {umkm.nama}
-                  </p>
-                  <p className="text-xs text-warm-brown-750 dark:text-warm-brown-300 mt-1 leading-normal border-t border-warm-brown-100/60 pt-1.5 dark:border-warm-brown-800/60">
-                    Produk: {umkm.produk}
-                  </p>
-                  <p className="text-[10px] text-warm-brown-500 dark:text-warm-brown-450 mt-1">
-                    {umkm.alamat} (RT {umkm.rt} / RW {umkm.rw})
-                  </p>
+                  {umkm.produk && (
+                    <p className="text-xs text-warm-brown-750 dark:text-warm-brown-300 mt-1 leading-normal border-t border-warm-brown-100/60 pt-1.5 dark:border-warm-brown-800/60">
+                      Produk: {umkm.produk}
+                    </p>
+                  )}
+                  {umkm.alamat && (
+                    <p className="text-[10px] text-warm-brown-500 dark:text-warm-brown-450 mt-1">
+                      {umkm.alamat} {umkm.rt && umkm.rw ? `(RT ${umkm.rt} / RW ${umkm.rw})` : ''}
+                    </p>
+                  )}
+
+                  {umkm.url && (
+                    <a
+                      href={umkm.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2.5 inline-flex items-center justify-center gap-1 w-full rounded-xl bg-warm-brown-700 hover:bg-warm-brown-800 text-white text-[11px] font-bold py-1.5 px-2.5 transition-colors shadow-sm no-underline"
+                    >
+                      <span>📍 Buka di Google Maps</span>
+                    </a>
+                  )}
                 </div>
               </Popup>
             </Marker>

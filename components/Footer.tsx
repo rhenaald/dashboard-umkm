@@ -73,7 +73,7 @@ export default function Footer() {
               </div>
               <div>
                 <span className="block text-base font-bold tracking-wider text-warm-brown-900 dark:text-warm-brown-100 uppercase">
-                  BAKUL KAHURIPAN
+                  BAKUL PELAK
                 </span>
                 <span className="block text-[11px] text-warm-brown-550 dark:text-warm-brown-400 font-medium leading-none">
                   Bantu Kelola Usaha Lokal
@@ -81,7 +81,7 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-sm text-warm-brown-600 dark:text-warm-brown-300 leading-relaxed">
-              Portal digital inovatif untuk mendukung kemajuan, pemetaan, dan monitoring Usaha Mikro, Kecil, dan Menengah di Kelurahan Kahuripan.
+              Platform digital yang menyediakan dashboard statistik, portal pelayanan publik, dan pemetaan interaktif untuk mendukung pengelolaan data UMKM melalui Platform Ekonomi Lokal dan Administrasi Kolaboratif.
             </p>
             {/* Social Media Links */}
             <div className="flex space-x-3 pt-2">
@@ -194,7 +194,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-center sm:text-left">
             <p className="text-xs text-warm-brown-550 dark:text-warm-brown-400">
-              &copy; {currentYear} <strong>BAKUL KAHURIPAN</strong>. Semua hak cipta dilindungi.
+              &copy; {currentYear} <strong>BAKUL PELAK</strong>. Semua hak cipta dilindungi.
             </p>
             <p className="text-[10px] text-warm-brown-450 dark:text-warm-brown-500 mt-1">
               Pemerintah Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya

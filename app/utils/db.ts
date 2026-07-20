@@ -44,7 +44,8 @@ export async function createUmkm(data: Omit<Umkm, 'id'>): Promise<Umkm> {
           kecamatan: data.kecamatan,
           tahun_laporan: Number(data.tahun_laporan),
           latitude: Number(data.latitude),
-          longitude: Number(data.longitude)
+          longitude: Number(data.longitude),
+          url: data.url
         }
       });
       return created as unknown as Umkm;

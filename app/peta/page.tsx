@@ -3,8 +3,8 @@ import { getAllUmkm } from '@/app/utils/db';
 import PemetaanClient from '@/components/PemetaanClient';
 
 export const metadata = {
-  title: 'Pemetaan Interaktif UMKM - BAKUL KAHURIPAN',
-  description: 'Peta sebaran lokasi usaha mikro di Kelurahan Kahuripan, Kecamatan Tawang, lengkap dengan koordinat spasial dan visualisasi detail.',
+  title: 'Pemetaan Interaktif UMKM - BAKUL PELAK',
+  description: 'Peta sebaran lokasi usaha mikro, lengkap dengan koordinat spasial dan visualisasi detail.',
 };
 
 export default async function PetaPage() {

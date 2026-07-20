@@ -98,9 +98,6 @@ export default async function Home(props: PageProps) {
                     <h3 className="mt-4 text-lg font-bold text-warm-brown-900 dark:text-warm-brown-150">
                       {highlightText(umkm.nama_usaha, query)}
                     </h3>
-                    <p className="mt-1 text-sm text-warm-brown-600 dark:text-warm-brown-400 font-medium">
-                      Pemilik: {highlightText(umkm.nama, query)}
-                    </p>
                     <p className="mt-2 text-sm text-warm-brown-700 dark:text-warm-brown-300">
                       Produk: {highlightText(umkm.produk, query)}
                     </p>
@@ -164,13 +161,13 @@ export default async function Home(props: PageProps) {
               <div className="lg:col-span-7 flex flex-col space-y-6">
                 <div className="w-fit inline-flex items-center gap-1.5 rounded-full bg-warm-brown-900/70 px-3.5 py-1 text-xs font-semibold tracking-wide text-warm-brown-200 border border-warm-brown-800 backdrop-blur-sm whitespace-nowrap">
                   <Award size={14} className="text-warm-brown-400" />
-                  Digitalisasi UMKM Mandiri Kelurahan Kahuripan
+                  Platform Ekonomi Lokal & Administrasi Kolaboratif
                 </div>
                 <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-white">
-                  BAKUL KAHURIPAN
+                  BAKUL PELAK
                 </h1>
-                <p className="text-lg text-warm-brown-200/90 leading-relaxed max-w-xl">
-                  Bantu Kelola Usaha Lokal (BAKUL KAHURIPAN) adalah dashboard statistik, portal pelayanan publik, dan pemetaan interaktif digital bagi pelaku UMKM di wilayah Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya.
+                <p className="text-base text-warm-brown-200/90 leading-relaxed max-w-2xl">
+                  BAKUL PELAK (Bantu Kelola Usaha Lokal melalui Platform Ekonomi Lokal dan Administrasi Kolaboratif) merupakan platform digital yang menyediakan dashboard statistik, portal pelayanan publik, dan pemetaan interaktif untuk mendukung pengelolaan data UMKM di berbagai wilayah. Sistem ini dirancang untuk mempermudah pemerintah daerah, pelaku UMKM, dan masyarakat dalam mengakses informasi, mengelola data, serta mendukung pengambilan keputusan berbasis data secara terintegrasi dan kolaboratif.
                 </p>
                 <div className="flex flex-wrap gap-4 pt-2">
                   <Link

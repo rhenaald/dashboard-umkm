@@ -32,22 +32,22 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
   }, [initialUmkmList]);
 
   // Extract unique kecamatan and years for dropdown filters
-  const kecamatans = Array.from(new Set(initialUmkmList.map(item => item.kecamatan)));
-  const years = Array.from(new Set(initialUmkmList.map(item => item.tahun_laporan))).sort();
+  const kecamatans = Array.from(new Set(initialUmkmList.map(item => item.kecamatan).filter((k): k is string => Boolean(k))));
+  const years = Array.from(new Set(initialUmkmList.map(item => item.tahun_laporan).filter((yr): yr is number => yr !== null && yr !== undefined))).sort();
 
   // Apply filters
   const filteredList = umkmList.filter(item => {
     const matchesKecamatan = !selectedKecamatan ||
-      item.kecamatan.toLowerCase() === selectedKecamatan.toLowerCase();
+      (item.kecamatan || '').toLowerCase() === selectedKecamatan.toLowerCase();
     const matchesYear = !selectedYear ||
       item.tahun_laporan === parseInt(selectedYear);
     return matchesKecamatan && matchesYear;
   });
 
   // Calculate Welfare Stats
-  const desil1to4Count = filteredList.filter(item => item.desil >= 1 && item.desil <= 4).length;
-  const desil1to5Count = filteredList.filter(item => item.desil >= 1 && item.desil <= 5).length;
-  const desil6to10Count = filteredList.filter(item => item.desil >= 6 && item.desil <= 10).length;
+  const desil1to4Count = filteredList.filter(item => item.desil !== null && item.desil !== undefined && item.desil >= 1 && item.desil <= 4).length;
+  const desil1to5Count = filteredList.filter(item => item.desil !== null && item.desil !== undefined && item.desil >= 1 && item.desil <= 5).length;
+  const desil6to10Count = filteredList.filter(item => item.desil !== null && item.desil !== undefined && item.desil >= 6 && item.desil <= 10).length;
   const pendingValidationCount = filteredList.filter(item => item.status_validasi === 'Perlu Cek').length;
 
   // Build Desil 1-10 Chart Data
@@ -297,7 +297,7 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="bg-warm-brown-50 border-b border-warm-brown-100 text-warm-brown-800 uppercase tracking-wider font-extrabold dark:bg-warm-brown-950/40 dark:border-warm-brown-850 dark:text-warm-brown-300">
-                  <th className="px-4 py-2.5">Nama Usaha / Pemilik</th>
+                  <th className="px-4 py-2.5">Nama Usaha</th>
                   <th className="px-4 py-2.5 text-center">Desil</th>
                   <th className="px-4 py-2.5 text-center">Status</th>
                   <th className="px-4 py-2.5 text-center">Aksi</th>
@@ -312,29 +312,31 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
                     >
                       <td className="px-4 py-3">
                         <div className="font-bold">{umkm.nama_usaha}</div>
-                        <div className="text-[10px] text-warm-brown-500 mt-0.5">{umkm.nama} ({umkm.alamat})</div>
+                        <div className="text-[10px] text-warm-brown-500 mt-0.5">{umkm.alamat}</div>
                       </td>
                       <td className="px-4 py-3 text-center font-bold">
-                        <span className={`inline-flex rounded h-6 w-6 items-center justify-center font-black ${umkm.desil <= 4
-                            ? 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'
-                            : umkm.desil <= 7
-                              ? 'bg-orange-100 text-orange-850 dark:bg-orange-950/40 dark:text-orange-350'
-                              : 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
-                          }`}>
-                          {umkm.desil}
-                        </span>
+                        {umkm.desil !== null && umkm.desil !== undefined ? (
+                          <span className={`inline-flex rounded h-6 w-6 items-center justify-center font-black ${umkm.desil <= 4
+                              ? 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'
+                              : umkm.desil <= 7
+                                ? 'bg-orange-100 text-orange-850 dark:bg-orange-950/40 dark:text-orange-350'
+                                : 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300'
+                            }`}>
+                            {umkm.desil}
+                          </span>
+                        ) : '-'}
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold ${umkm.status_validasi === 'Cek Lapangan'
                             ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
                             : 'bg-red-100 text-red-800 dark:bg-red-950/30 dark:text-red-300'
                           }`}>
-                          {umkm.status_validasi}
+                          {umkm.status_validasi || '-'}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <button
-                          onClick={() => handleToggleValidasi(umkm.id, umkm.status_validasi)}
+                          onClick={() => handleToggleValidasi(umkm.id, (umkm.status_validasi as 'Cek Lapangan' | 'Perlu Cek') || 'Perlu Cek')}
                           disabled={updatingId === umkm.id}
                           className={`rounded-lg px-2.5 py-1.5 text-[10px] font-extrabold border shadow-sm transition-colors ${umkm.status_validasi === 'Cek Lapangan'
                               ? 'bg-white border-warm-brown-300 text-warm-brown-800 hover:bg-warm-brown-100 dark:bg-warm-brown-900 dark:border-warm-brown-800 dark:text-warm-brown-200 dark:hover:bg-warm-brown-850'

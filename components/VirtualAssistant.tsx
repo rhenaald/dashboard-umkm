@@ -38,7 +38,7 @@ export default function VirtualAssistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'bot',
-      text: 'Sampurasun! Saya Asisten BAKUL, asisten virtual kelurahan Kahuripan. Ada yang bisa saya bantu terkait perizinan, sertifikasi halal, atau program UMKM?'
+      text: 'Sampurasun! Saya Asisten BAKUL PELAK, asisten virtual platform ekonomi lokal. Ada yang bisa saya bantu terkait perizinan, sertifikasi halal, atau program UMKM?'
     }
   ]);
   const [chatInput, setChatInput] = useState('');
@@ -102,7 +102,7 @@ export default function VirtualAssistant() {
               </div>
               <div>
                 <h3 className="text-sm font-bold tracking-wide text-warm-brown-900 dark:text-warm-brown-100">
-                  Asisten Virtual BAKUL
+                  Asisten Virtual BAKUL PELAK
                 </h3>
                 <div className="flex items-center gap-1">
                   <span className="block h-2 w-2 rounded-full bg-green-500 animate-ping"></span>
@@ -225,10 +225,10 @@ export default function VirtualAssistant() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="group relative flex items-center justify-center h-14 w-14 rounded-full bg-warm-brown-700 hover:bg-warm-brown-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 animate-bounce-short"
-        aria-label="Tanya Asisten Virtual BAKUL"
+        aria-label="Tanya Asisten Virtual BAKUL PELAK"
       >
         <span className="absolute right-16 bg-warm-brown-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-warm-brown-950">
-          Tanya Asisten BAKUL
+          Tanya Asisten BAKUL PELAK
         </span>
         {isOpen ? (
           <X size={24} className="animate-in spin-in-90 duration-200" />

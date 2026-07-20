@@ -1,8 +1,6 @@
-# BAKUL KAHURIPAN (Bantu Kelola Usaha Lokal)
+# BAKUL PELAK
 
-**BAKUL KAHURIPAN** adalah sebuah platform web terpadu berupa dashboard statistik, sistem pemetaan interaktif, portal layanan publik, dan panel manajemen data (CRUD) bagi pelaku Usaha Mikro, Kecil, dan Menengah (UMKM) di wilayah **Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya**.
-
-Aplikasi ini dirancang untuk mempercepat digitalisasi data pelaku usaha, menyajikan statistik ekonomi secara transparan, memetakan lokasi fisik usaha secara spasial, serta mempermudah pendataan kesejahteraan (desil) pelaku usaha.
+**BAKUL PELAK** (Bantu Kelola Usaha Lokal melalui Platform Ekonomi Lokal dan Administrasi Kolaboratif) merupakan platform digital yang menyediakan dashboard statistik, portal pelayanan publik, dan pemetaan interaktif untuk mendukung pengelolaan data UMKM di berbagai wilayah. Sistem ini dirancang untuk mempermudah pemerintah daerah, pelaku UMKM, dan masyarakat dalam mengakses informasi, mengelola data, serta mendukung pengambilan keputusan berbasis data secara terintegrasi dan kolaboratif.
 
 ---
 

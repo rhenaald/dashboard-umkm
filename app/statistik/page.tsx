@@ -4,8 +4,8 @@ import StatsCharts from '@/components/StatsCharts';
 import { Store, ShieldCheck, GraduationCap, TrendingUp } from 'lucide-react';
 
 export const metadata = {
-  title: 'Dashboard Statistik UMKM - BAKUL KAHURIPAN',
-  description: 'Informasi visual grafik sebaran UMKM, status kepemilikan NIB, dan tingkat pelatihan pelaku usaha Kelurahan Kahuripan.',
+  title: 'Dashboard Statistik UMKM - BAKUL PELAK',
+  description: 'Informasi visual grafik sebaran UMKM, status kepemilikan NIB, dan tingkat pelatihan pelaku usaha.',
 };
 
 export default async function StatistikPage() {

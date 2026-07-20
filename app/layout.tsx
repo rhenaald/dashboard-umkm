@@ -6,10 +6,10 @@ import VirtualAssistant from "@/components/VirtualAssistant";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "BAKUL KAHURIPAN - Dashboard & Portal UMKM Kelurahan Kahuripan",
-  description: "Bantu Kelola Usaha Lokal (BAKUL KAHURIPAN) - Portal digital, pemetaan interaktif, monitoring desil, dan statistik UMKM Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya.",
-  keywords: ["UMKM", "Kahuripan", "Tasikmalaya", "Tawang", "Dashboard UMKM", "Pemetaan UMKM", "Desil UMKM", "NIB", "Sertifikasi Halal"],
-  authors: [{ name: "Pemerintah Kelurahan Kahuripan" }],
+  title: "BAKUL PELAK - Platform Ekonomi Lokal & Administrasi Kolaboratif",
+  description: "BAKUL PELAK (Bantu Kelola Usaha Lokal melalui Platform Ekonomi Lokal dan Administrasi Kolaboratif) merupakan platform digital yang menyediakan dashboard statistik, portal pelayanan publik, dan pemetaan interaktif untuk mendukung pengelolaan data UMKM di berbagai wilayah. Sistem ini dirancang untuk mempermudah pemerintah daerah, pelaku UMKM, dan masyarakat dalam mengakses informasi, mengelola data, serta mendukung pengambilan keputusan berbasis data secara terintegrasi dan kolaboratif.",
+  keywords: ["UMKM", "BAKUL PELAK", "Ekonomi Lokal", "Administrasi Kolaboratif", "Dashboard UMKM", "Pemetaan UMKM", "Desil UMKM", "NIB", "Sertifikasi Halal"],
+  authors: [{ name: "Platform BAKUL PELAK" }],
 };
 
 export default function RootLayout({

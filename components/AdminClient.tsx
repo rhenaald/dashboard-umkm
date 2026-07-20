@@ -6,7 +6,8 @@ import { Umkm } from '@/app/utils/mockData';
 import {
   Plus, Edit, Trash2, Search, Filter,
   X, Check, AlertTriangle, ShieldCheck,
-  GraduationCap, Sliders, ChevronLeft, ChevronRight, LogOut
+  GraduationCap, Sliders, ChevronLeft, ChevronRight, LogOut,
+  Eye, ExternalLink, MapPin
 } from 'lucide-react';
 
 interface AdminClientProps {
@@ -20,6 +21,15 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 15;
+
+  // Detail Modal State
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [detailUmkm, setDetailUmkm] = useState<Umkm | null>(null);
+
+  const handleOpenDetail = (umkm: Umkm) => {
+    setDetailUmkm(umkm);
+    setIsDetailModalOpen(true);
+  };
 
   const handleLogout = async () => {
     if (!confirm('Apakah Anda yakin ingin keluar dari panel admin?')) return;
@@ -61,6 +71,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
   const [tahunLaporan, setTahunLaporan] = useState(new Date().getFullYear());
   const [latitude, setLatitude] = useState(-7.335);
   const [longitude, setLongitude] = useState(108.222);
+  const [url, setUrl] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,10 +85,10 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
   // Filter list
   const filteredList = umkmList.filter(item => {
     const matchesSearch =
-      item.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.nama_usaha.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.produk.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.alamat.toLowerCase().includes(searchQuery.toLowerCase());
+      (item.nama || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.nama_usaha || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.produk || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.alamat || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || item.kategori === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -87,8 +98,12 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
     setCurrentPage(1);
   }, [searchQuery, selectedCategory]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredList.length / ITEMS_PER_PAGE));
-  const paginatedList = filteredList.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  // Pagination calculation
+  const totalPages = Math.ceil(filteredList.length / ITEMS_PER_PAGE) || 1;
+  const paginatedList = filteredList.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   // Open modal for Create
   const handleOpenCreate = () => {
@@ -99,16 +114,17 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
     setProduk('');
     setKategori('Kuliner');
     setAlamat('');
-    setRt(1);
-    setRw(1);
+    setRt(0);
+    setRw(0);
     setStatusNib('Belum NIB');
     setStatusPelatihan('Belum');
-    setDesil(1);
+    setDesil(0);
     setStatusValidasi('Perlu Cek');
     setKecamatan('Tawang');
     setTahunLaporan(new Date().getFullYear());
     setLatitude(-7.335);
     setLongitude(108.222);
+    setUrl('');
     setIsModalOpen(true);
   };
 
@@ -116,21 +132,22 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
   const handleOpenEdit = (umkm: Umkm) => {
     setModalMode('edit');
     setEditingId(umkm.id);
-    setNama(umkm.nama);
-    setNamaUsaha(umkm.nama_usaha);
-    setProduk(umkm.produk);
-    setKategori(umkm.kategori);
+    setNama(umkm.nama || '');
+    setNamaUsaha(umkm.nama_usaha || '');
+    setProduk(umkm.produk || '');
+    setKategori(umkm.kategori || 'Kuliner');
     setAlamat(umkm.alamat || '');
-    setRt(umkm.rt);
-    setRw(umkm.rw);
-    setStatusNib(umkm.status_nib);
-    setStatusPelatihan(umkm.status_pelatihan);
-    setDesil(umkm.desil);
-    setStatusValidasi(umkm.status_validasi);
-    setKecamatan(umkm.kecamatan);
-    setTahunLaporan(umkm.tahun_laporan);
-    setLatitude(umkm.latitude);
-    setLongitude(umkm.longitude);
+    setRt(umkm.rt || 0);
+    setRw(umkm.rw || 0);
+    setStatusNib((umkm.status_nib as 'Sudah NIB' | 'Belum NIB') || 'Belum NIB');
+    setStatusPelatihan((umkm.status_pelatihan as 'Pernah' | 'Belum') || 'Belum');
+    setDesil(umkm.desil || 0);
+    setStatusValidasi((umkm.status_validasi as 'Cek Lapangan' | 'Perlu Cek') || 'Perlu Cek');
+    setKecamatan(umkm.kecamatan || 'Tawang');
+    setTahunLaporan(umkm.tahun_laporan || 2026);
+    setLatitude(umkm.latitude || -7.335);
+    setLongitude(umkm.longitude || 108.222);
+    setUrl(umkm.url || '');
     setIsModalOpen(true);
   };
 
@@ -155,6 +172,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
       tahun_laporan: Number(tahunLaporan),
       latitude: Number(latitude),
       longitude: Number(longitude),
+      url,
     };
 
     try {
@@ -231,7 +249,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
             </div>
             <input
               type="text"
-              placeholder="Cari nama pemilik, usaha, produk..."
+              placeholder="Cari nama usaha, produk, alamat..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full rounded-xl border border-warm-brown-200 bg-white py-1.5 pl-9 pr-4 text-xs font-medium text-warm-brown-900 focus:border-warm-brown-650 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"
@@ -283,7 +301,6 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
             <tr className="bg-warm-brown-100 border-b border-warm-brown-200 dark:bg-warm-brown-900 dark:border-warm-brown-850 text-warm-brown-850 dark:text-warm-brown-150 uppercase tracking-wider font-extrabold">
               <th className="px-4 py-3 text-center">ID</th>
               <th className="px-4 py-3">Nama Usaha / Produk</th>
-              <th className="px-4 py-3">Pemilik</th>
               <th className="px-4 py-3">Kategori</th>
               <th className="px-4 py-3">RT/RW</th>
               <th className="px-4 py-3">Desil</th>
@@ -304,47 +321,55 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                     <div className="font-bold text-sm text-warm-brown-900 dark:text-warm-brown-100">{umkm.nama_usaha}</div>
                     <div className="text-[10px] text-warm-brown-500 mt-0.5">{umkm.produk}</div>
                   </td>
-                  <td className="px-4 py-3 font-bold">{umkm.nama}</td>
                   <td className="px-4 py-3">
                     <span className="inline-flex rounded-full bg-warm-brown-100 px-2 py-0.5 text-[10px] font-bold text-warm-brown-800 dark:bg-warm-brown-800 dark:text-warm-brown-200">
                       {umkm.kategori}
                     </span>
                   </td>
-                  <td className="px-4 py-3 font-bold">RT {umkm.rt} / RW {umkm.rw}</td>
+                  <td className="px-4 py-3 font-bold">{umkm.rt && umkm.rw ? `RT ${umkm.rt} / RW ${umkm.rw}` : '-'}</td>
                   <td className="px-4 py-3">
-                    <span className={`inline-flex rounded h-5 w-5 items-center justify-center text-[10px] font-black ${umkm.desil <= 4
-                        ? 'bg-red-100 text-red-800'
-                        : umkm.desil <= 7
-                          ? 'bg-orange-100 text-orange-800'
-                          : 'bg-green-100 text-green-800'
-                      }`}>
-                      {umkm.desil}
-                    </span>
+                    {umkm.desil !== null && umkm.desil !== undefined ? (
+                      <span className={`inline-flex rounded h-5 w-5 items-center justify-center text-[10px] font-black ${umkm.desil <= 4
+                          ? 'bg-red-100 text-red-800'
+                          : umkm.desil <= 7
+                            ? 'bg-orange-100 text-orange-800'
+                            : 'bg-green-100 text-green-800'
+                        }`}>
+                        {umkm.desil}
+                      </span>
+                    ) : '-'}
                   </td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_nib === 'Sudah NIB' ? 'bg-green-100 text-green-800' : 'bg-warm-brown-100 text-warm-brown-800'
                       }`}>
-                      {umkm.status_nib}
+                      {umkm.status_nib || '-'}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_pelatihan === 'Pernah' ? 'bg-warm-brown-100 text-warm-brown-800' : 'bg-warm-brown-100 text-warm-brown-850'
                       }`}>
-                      {umkm.status_pelatihan} Pelatihan
+                      {umkm.status_pelatihan || '-'}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <button
+                        onClick={() => handleOpenDetail(umkm)}
+                        className="rounded-lg p-1.5 border border-blue-200 hover:bg-blue-50 text-blue-600 dark:border-blue-900/50 dark:text-blue-400 dark:hover:bg-blue-950/30 transition-colors"
+                        title="Lihat Detail Usaha"
+                      >
+                        <Eye size={14} />
+                      </button>
                       <button
                         onClick={() => handleOpenEdit(umkm)}
-                        className="rounded-lg p-1.5 border border-warm-brown-200 hover:bg-warm-brown-100 text-warm-brown-700 dark:border-warm-brown-800 dark:hover:bg-warm-brown-850"
+                        className="rounded-lg p-1.5 border border-warm-brown-200 hover:bg-warm-brown-100 text-warm-brown-700 dark:border-warm-brown-800 dark:hover:bg-warm-brown-850 transition-colors"
                         title="Edit Data"
                       >
                         <Edit size={14} />
                       </button>
                       <button
                         onClick={() => handleDelete(umkm.id, umkm.nama_usaha)}
-                        className="rounded-lg p-1.5 border border-red-200 hover:bg-red-50 text-red-650 dark:border-red-950 dark:hover:bg-red-950/20"
+                        className="rounded-lg p-1.5 border border-red-200 hover:bg-red-50 text-red-650 dark:border-red-950 dark:hover:bg-red-950/20 transition-colors"
                         title="Hapus Usaha"
                       >
                         <Trash2 size={14} />
@@ -389,11 +414,11 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
 
       {/* Create / Edit Modal Form */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl border border-warm-brown-200 max-w-2xl w-full shadow-2xl overflow-hidden dark:bg-warm-brown-900 dark:border-warm-brown-850 animate-fadeIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-3xl border border-warm-brown-200 max-w-2xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden dark:bg-warm-brown-900 dark:border-warm-brown-850 animate-fadeIn">
 
             {/* Modal Header */}
-            <div className="bg-warm-brown-100 p-5 text-warm-brown-900 border-b border-warm-brown-200 flex items-center justify-between">
+            <div className="shrink-0 bg-warm-brown-100 p-4 text-warm-brown-900 border-b border-warm-brown-200 flex items-center justify-between">
               <h3 className="font-extrabold text-sm tracking-wide uppercase flex items-center gap-1.5 text-warm-brown-800">
                 <Sliders size={16} />
                 {modalMode === 'create' ? 'Daftarkan UMKM Baru' : 'Perbarui Data UMKM'}
@@ -404,20 +429,9 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
             </div>
 
             {/* Modal Body / Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[500px] overflow-y-auto text-xs">
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
               <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="block font-bold text-warm-brown-650 mb-1 dark:text-warm-brown-400 uppercase tracking-wide">Nama Pemilik</label>
-                  <input
-                    type="text"
-                    required
-                    value={nama}
-                    onChange={(e) => setNama(e.target.value)}
-                    placeholder="Nama lengkap pemilik usaha"
-                    className="w-full rounded-xl border border-warm-brown-200 bg-white py-2 px-3 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"
-                  />
-                </div>
-                <div>
+                <div className="sm:col-span-2">
                   <label className="block font-bold text-warm-brown-650 mb-1 dark:text-warm-brown-400 uppercase tracking-wide">Nama Usaha</label>
                   <input
                     type="text"
@@ -460,10 +474,20 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                 <label className="block font-bold text-warm-brown-650 mb-1 dark:text-warm-brown-400 uppercase tracking-wide">Alamat Usaha</label>
                 <input
                   type="text"
-                  required
                   value={alamat}
                   onChange={(e) => setAlamat(e.target.value)}
                   placeholder="Nama jalan, nomor rumah"
+                  className="w-full rounded-xl border border-warm-brown-200 bg-white py-2 px-3 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-warm-brown-650 mb-1 dark:text-warm-brown-400 uppercase tracking-wide">Link Google Maps (URL)</label>
+                <input
+                  type="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://www.google.com/maps/search/?api=1&query=..."
                   className="w-full rounded-xl border border-warm-brown-200 bg-white py-2 px-3 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"
                 />
               </div>
@@ -590,7 +614,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
               </div>
 
               {/* Modal Footer / Form Buttons */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-warm-brown-100 dark:border-warm-brown-800">
+              <div className="shrink-0 bg-warm-brown-50 dark:bg-warm-brown-950 p-4 border-t border-warm-brown-100 dark:border-warm-brown-800 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -617,6 +641,121 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Detail Modal */}
+      {isDetailModalOpen && detailUmkm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-warm-brown-950/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden rounded-3xl bg-white shadow-2xl border border-warm-brown-200 dark:bg-warm-brown-900 dark:border-warm-brown-850">
+            {/* Modal Header */}
+            <div className="shrink-0 bg-warm-brown-900 p-4 text-white flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="h-8 w-8 rounded-xl bg-warm-brown-800 flex items-center justify-center text-warm-brown-200">
+                  <Eye size={16} />
+                </div>
+                <div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-warm-brown-300">Detail Tempat Usaha</span>
+                  <h3 className="font-extrabold text-sm leading-snug">{detailUmkm.nama_usaha}</h3>
+                </div>
+              </div>
+              <button onClick={() => setIsDetailModalOpen(false)} className="text-warm-brown-300 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs text-warm-brown-800 dark:text-warm-brown-200">
+              
+              {/* Badges / Quick Metrics */}
+              <div className="flex flex-wrap items-center gap-2 border-b border-warm-brown-100 dark:border-warm-brown-850 pb-3">
+                <span className="px-2.5 py-0.5 rounded-full bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-800 dark:text-warm-brown-200 font-extrabold text-[10px] uppercase">
+                  {detailUmkm.kategori || 'Usaha'}
+                </span>
+                {detailUmkm.status_nib && (
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_nib === 'Sudah NIB' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'}`}>
+                    {detailUmkm.status_nib}
+                  </span>
+                )}
+                {detailUmkm.status_validasi && (
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_validasi === 'Cek Lapangan' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'}`}>
+                    Status Validasi: {detailUmkm.status_validasi}
+                  </span>
+                )}
+              </div>
+
+              {/* Main Fields Grid */}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Produk Utama</span>
+                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.produk || '-'}</p>
+                </div>
+                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Alamat Lengkap</span>
+                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.alamat || '-'}</p>
+                </div>
+                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">RT / RW</span>
+                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.rt && detailUmkm.rw ? `RT ${detailUmkm.rt} / RW ${detailUmkm.rw}` : '-'}</p>
+                </div>
+                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Kecamatan</span>
+                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.kecamatan || 'Tawang'}</p>
+                </div>
+                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Desil Kesejahteraan</span>
+                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.desil ? `Desil ${detailUmkm.desil}` : '-'}</p>
+                </div>
+                <div className="bg-warm-brown-50 dark:bg-warm-brown-950/50 p-3 rounded-2xl border border-warm-brown-150 dark:border-warm-brown-850">
+                  <span className="block text-[10px] font-extrabold text-warm-brown-500 uppercase tracking-wider mb-0.5">Status Pelatihan</span>
+                  <p className="font-bold text-xs text-warm-brown-900 dark:text-warm-brown-100">{detailUmkm.status_pelatihan || '-'}</p>
+                </div>
+              </div>
+
+              {/* Embedded Google Maps View & Direct Link */}
+              <div className="space-y-2 border-t border-warm-brown-100 dark:border-warm-brown-850 pt-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-extrabold text-[11px] uppercase tracking-wider text-warm-brown-800 dark:text-warm-brown-200 flex items-center gap-1.5">
+                    <MapPin size={13} className="text-warm-brown-600 dark:text-warm-brown-400" />
+                    Peta Lokasi Google Maps
+                  </span>
+                  {detailUmkm.url && (
+                    <a
+                      href={detailUmkm.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-bold text-[11px] text-warm-brown-700 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:text-white underline"
+                    >
+                      <span>Buka di Google Maps</span>
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="h-[170px] sm:h-[190px] rounded-2xl overflow-hidden border border-warm-brown-200 dark:border-warm-brown-800 bg-warm-brown-100 dark:bg-warm-brown-950">
+                  <iframe
+                    title="Google Maps Location Detail"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(detailUmkm.nama_usaha + ' ' + (detailUmkm.alamat || 'Tawang Tasikmalaya'))}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                  ></iframe>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Footer */}
+            <div className="shrink-0 bg-warm-brown-50 dark:bg-warm-brown-950 p-3 border-t border-warm-brown-200 dark:border-warm-brown-850 flex justify-end">
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="rounded-xl bg-warm-brown-800 hover:bg-warm-brown-900 text-white font-bold px-5 py-1.5 transition-colors text-xs"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       )}

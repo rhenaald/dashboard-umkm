@@ -74,7 +74,7 @@ export default function Navbar() {
               </div>
               <div className="hidden sm:block">
                 <span className="block text-sm font-bold tracking-wider text-warm-brown-900 dark:text-warm-brown-100 uppercase">
-                  BAKUL KAHURIPAN
+                  BAKUL PELAK
                 </span>
                 <span className="block text-[10px] text-warm-brown-500 dark:text-warm-brown-400 -mt-1 font-medium">
                   Bantu Kelola Usaha Lokal

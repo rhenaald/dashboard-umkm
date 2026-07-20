@@ -3,7 +3,7 @@ import { getAllUmkm } from '@/app/utils/db';
 import AdminClient from '@/components/AdminClient';
 
 export const metadata = {
-  title: 'Kelola Data UMKM - BAKUL KAHURIPAN',
+  title: 'Kelola Data UMKM - BAKUL PELAK',
   description: 'Panel administrator untuk mengelola database UMKM, mendaftarkan usaha baru, memperbarui berkas legalitas NIB, pelatihan, desil, dan menghapus data usaha.',
 };
 

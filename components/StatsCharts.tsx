@@ -32,7 +32,8 @@ export default function StatsCharts({ data }: StatsChartsProps) {
   // 1. Calculate categories data (Horizontal Bar Chart)
   const categoryCounts: { [key: string]: number } = {};
   data.forEach(item => {
-    categoryCounts[item.kategori] = (categoryCounts[item.kategori] || 0) + 1;
+    const cat = item.kategori || 'Lainnya';
+    categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
   });
   
   const barData = Object.entries(categoryCounts).map(([name, value]) => ({

@@ -3,8 +3,8 @@ import { getAllUmkm } from '@/app/utils/db';
 import MonitoringClient from '@/components/MonitoringClient';
 
 export const metadata = {
-  title: 'Monitoring Kesejahteraan & Desil UMKM - BAKUL KAHURIPAN',
-  description: 'Sistem monitoring kesejahteraan desil pelaku usaha di Kelurahan Kahuripan, dilengkapi filter laporan, diagram sebaran desil, dan form validasi.',
+  title: 'Monitoring Kesejahteraan & Desil UMKM - BAKUL PELAK',
+  description: 'Sistem monitoring kesejahteraan desil pelaku usaha mikro, dilengkapi filter laporan, diagram sebaran desil, dan form validasi.',
 };
 
 export default async function MonitoringPage() {

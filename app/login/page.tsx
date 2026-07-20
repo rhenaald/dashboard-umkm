@@ -49,7 +49,7 @@ export default function LoginPage() {
             <Store size={28} />
           </div>
           <h2 className="mt-6 text-2xl font-black tracking-wide text-warm-brown-900 dark:text-warm-brown-100 uppercase">
-            BAKUL KAHURIPAN
+            BAKUL PELAK
           </h2>
           <p className="mt-1 text-xs text-warm-brown-600 dark:text-warm-brown-400 font-bold uppercase tracking-wider">
             Admin Panel Authentication

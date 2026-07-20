@@ -45,30 +45,31 @@ export async function POST(request: NextRequest) {
     const { 
       nama, nama_usaha, produk, kategori, alamat, rt, rw, 
       status_nib, status_pelatihan, desil, status_validasi, 
-      kecamatan, tahun_laporan, latitude, longitude 
+      kecamatan, tahun_laporan, latitude, longitude, url
     } = body;
 
-    // Validate required fields
-    if (!nama || !nama_usaha || !produk || !kategori || rt === undefined || rw === undefined || !status_nib || !status_pelatihan || desil === undefined || !status_validasi || !kecamatan || !tahun_laporan || latitude === undefined || longitude === undefined) {
-      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
+    // Only nama_usaha is strictly required
+    if (!nama_usaha) {
+      return NextResponse.json({ error: 'Nama usaha wajib diisi' }, { status: 400 });
     }
 
     const created = await createUmkm({
-      nama,
+      nama: nama || '',
       nama_usaha,
-      produk,
-      kategori,
+      produk: produk || '',
+      kategori: kategori || 'Perdagangan',
       alamat: alamat || '',
-      rt: Number(rt),
-      rw: Number(rw),
-      status_nib,
-      status_pelatihan,
-      desil: Number(desil),
-      status_validasi,
-      kecamatan,
-      tahun_laporan: Number(tahun_laporan),
-      latitude: Number(latitude),
-      longitude: Number(longitude)
+      rt: rt !== undefined && rt !== null ? Number(rt) : 0,
+      rw: rw !== undefined && rw !== null ? Number(rw) : 0,
+      status_nib: status_nib || '',
+      status_pelatihan: status_pelatihan || '',
+      desil: desil !== undefined && desil !== null ? Number(desil) : 0,
+      status_validasi: status_validasi || '',
+      kecamatan: kecamatan || 'Tawang',
+      tahun_laporan: tahun_laporan !== undefined && tahun_laporan !== null ? Number(tahun_laporan) : 2026,
+      latitude: latitude !== undefined && latitude !== null ? Number(latitude) : -7.335,
+      longitude: longitude !== undefined && longitude !== null ? Number(longitude) : 108.222,
+      url: url || ''
     });
 
     return NextResponse.json(created, { status: 201 });
