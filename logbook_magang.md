@@ -38,3 +38,15 @@ Tabel berikut menunjukkan logbook progres harian selama 20 hari kerja untuk **Ma
 | **Hari 18** | Pembuatan komponen diagram status survei pelaku usaha pada panel monitoring (Route: `/monitoring`). | Implementasi penataan struktur desil kemiskinan (Desil 1–4) UMKM dari database ke halaman monitoring (Route: `/monitoring`). | - |
 | **Hari 19** | **Progres:** Melakukan pengujian fungsionalitas (QA) mandiri terhadap form CRUD (`/admin`), chatbot, dan peta interaktif (`/peta`), serta perbaikan bug visual minor.<br><br>**Bimbingan:** Demo akhir keseluruhan fungsionalitas aplikasi (Statistik, Peta, Chatbot, CRUD Admin, Monitoring Desil) dan konsultasi penyusunan laporan magang. | **Progres:** Pembuatan fitur validasi status survei lapangan (belum survei, proses, selesai) beserta filternya di backend (Route: `/api/umkm`), serta stress testing database.<br><br>**Bimbingan:** Demo akhir keseluruhan fungsionalitas aplikasi (Statistik, Peta, Chatbot, CRUD Admin, Monitoring Desil) dan konsultasi penyusunan laporan magang. | **Bimbingan 4:**<br>Demo akhir keseluruhan fungsionalitas aplikasi (Statistik, Peta, Chatbot, CRUD Admin, Monitoring Desil) dan konsultasi penyusunan laporan magang. |
 | **Hari 20** | Finalisasi build project produksi Next.js, pengujian performa (Lighthouse), dan perapian kode. | Penyusunan dokumentasi kode program (README, dokumentasi API - Route: `/api/umkm` & `/api/auth`) serta penyerahan (handover) database. | - |
+
+---
+
+## 📌 Catatan Pembaruan & Fitur Tambahan Terakhir (Post-Development Update)
+
+| Fitur / Modul | Deskripsi Pembaruan |
+| :--- | :--- |
+| **Pembaruan Branding** | Penyesuaian nama platform menjadi **BAKUL PELAK** *(Bantu Kelola Usaha Lokal melalui Platform Ekonomi Lokal dan Administrasi Kolaboratif)* pada seluruh halaman, navbar, footer, metadata SEO, dan komponen chatbot. |
+| **Ekspansi Dataset Asli** | Penggabungan data 2.500 UMKM murni dari 2 wilayah (**1.250 Kec. Tawang** & **1.250 Kec. Cihideung**). |
+| **Presisi Geolocation GPS** | Penggunaan koordinat desimal GPS asli (`location.lat` & `location.lng`) pada peta Leaflet.js dengan penanda warna unik per kategori (🔴 Kuliner, 🔵 Jasa, 🟣 Fesyen, 🟢 Kerajinan, 🟡 Perdagangan). |
+| **Aksi Show / Detail Admin** | Penambahan tombol **Lihat Detail (👁️)** pada tabel Admin dengan modal pop-up responsif 2-kolom (Informasi di kiri, Peta Google Maps Embed & link navigasi eksternal di kanan). |
+| **Integrasi Cloud Database** | Migrasi dan penyelarasan skema Prisma ORM ke basis data Cloud PostgreSQL (**Neon DB**) untuk kemudahan kolaborasi multi-user. |
