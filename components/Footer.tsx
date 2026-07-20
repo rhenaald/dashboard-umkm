@@ -172,7 +172,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-warm-brown-600 dark:text-warm-brown-300">
               <li className="flex items-start gap-2.5">
                 <MapPin size={18} className="mt-0.5 text-warm-brown-500 shrink-0" />
-                <span>Jl. Siliwangi, Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya, Jawa Barat 46115</span>
+                <span>Jl. Siliwangi & KHZ Mustofa, Wilayah Tawang & Cihideung, Kota Tasikmalaya, Jawa Barat 46115</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone size={18} className="text-warm-brown-500 shrink-0" />
@@ -180,7 +180,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail size={18} className="text-warm-brown-500 shrink-0" />
-                <span>kel.kahuripan@tasikmalayakota.go.id</span>
+                <span>umkm.tasikmalaya@tasikmalayakota.go.id</span>
               </li>
             </ul>
           </div>
@@ -197,7 +197,7 @@ export default function Footer() {
               &copy; {currentYear} <strong>BAKUL PELAK</strong>. Semua hak cipta dilindungi.
             </p>
             <p className="text-[10px] text-warm-brown-450 dark:text-warm-brown-500 mt-1">
-              Pemerintah Kelurahan Kahuripan, Kecamatan Tawang, Kota Tasikmalaya
+              Pemerintah Kota Tasikmalaya (Kecamatan Tawang & Cihideung)
             </p>
           </div>
           

@@ -23,7 +23,7 @@ export default async function PetaPage() {
             Pemetaan Usaha Mikro Terintegrasi
           </h1>
           <p className="mt-2 text-sm text-warm-brown-600 dark:text-warm-brown-400">
-            Pemetaan spasial sebaran lokasi UMKM di wilayah administratif Kelurahan Kahuripan. Gunakan filter kategori dan ketuk baris tabel untuk menyorot koordinat usaha pada peta.
+            Pemetaan spasial sebaran lokasi UMKM di wilayah administratif Kecamatan Tawang & Cihideung, Kota Tasikmalaya. Gunakan filter kategori, kecamatan, atau ketuk baris tabel untuk menyorot koordinat usaha pada peta.
           </p>
         </div>
 

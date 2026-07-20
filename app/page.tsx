@@ -191,24 +191,24 @@ export default async function Home(props: PageProps) {
                 <div className="relative rounded-3xl border border-warm-brown-200 bg-white p-8 shadow-2xl backdrop-blur-md">
                   <h3 className="text-xl font-bold border-b border-warm-brown-200 pb-4 text-warm-brown-900 flex items-center gap-2">
                     <Map size={20} className="text-warm-brown-500" />
-                    Profil Singkat Kelurahan
+                    Profil Singkat Wilayah
                   </h3>
                   <div className="mt-6 space-y-4 text-sm text-warm-brown-600">
                     <div className="flex justify-between items-center py-2 border-b border-warm-brown-200/60">
                       <span className="font-medium text-warm-brown-600">Kecamatan:</span>
-                      <span className="text-warm-brown-900 font-semibold">Tawang</span>
+                      <span className="text-warm-brown-900 font-semibold">Tawang & Cihideung</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-warm-brown-200/60">
                       <span className="font-medium text-warm-brown-600">Kota:</span>
                       <span className="text-warm-brown-900 font-semibold">Tasikmalaya</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-warm-brown-200/60">
-                      <span className="font-medium text-warm-brown-600">Penduduk:</span>
-                      <span className="text-warm-brown-900 font-semibold">~15.420 Jiwa (2025)</span>
+                      <span className="font-medium text-warm-brown-600">Estimasi Populasi:</span>
+                      <span className="text-warm-brown-900 font-semibold">~120.000+ Jiwa (2025)</span>
                     </div>
                     <div className="flex justify-between items-center py-2">
                       <span className="font-medium text-warm-brown-600">Peta Wilayah Admin:</span>
-                      <span className="text-warm-brown-500 font-semibold">Telah Terpetakan (100%)</span>
+                      <span className="text-warm-brown-500 font-semibold">Telah Terpetakan (2.500 UMKM)</span>
                     </div>
                   </div>
                   <div className="mt-6 flex gap-3">
@@ -237,51 +237,54 @@ export default async function Home(props: PageProps) {
                     Administrasi Wilayah
                   </span>
                   <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-warm-brown-900 dark:text-warm-brown-100 sm:text-4xl">
-                    Peta Batas Administrasi Kelurahan
+                    Peta Batas Administrasi Wilayah
                   </h2>
                   <p className="mt-4 text-sm text-warm-brown-700 dark:text-warm-brown-300 leading-relaxed">
-                    Kelurahan Kahuripan berbatasan langsung dengan Kelurahan Cikalang di sebelah timur dan Kelurahan Lengkong di sebelah utara. Wilayah ini terbagi dalam 12 Rukun Warga (RW) yang merupakan sentra pergerakan ekonomi mikro Kota Tasikmalaya.
+                    Kecamatan Tawang & Cihideung merupakan pusat pergerakan ekonomi mikro dan sentra industri kreatif Kota Tasikmalaya. Pemetaan ini mencakup kelurahan-kelurahan strategis seperti Kahuripan, Tugujaya, Tuguraja, Nagarawangi, Cilembang, dan sekitarnya.
                   </p>
                 </div>
 
-                {/* Stenciled Administrative SVG Map */}
-                <div className="relative h-64 rounded-3xl bg-warm-brown-100/50 border border-warm-brown-200 flex items-center justify-center p-4 overflow-hidden dark:bg-warm-brown-900/20 dark:border-warm-brown-850">
-                  <div className="absolute top-4 left-4 text-xs font-bold bg-warm-brown-950 text-warm-brown-100 rounded px-2.5 py-1 z-10 shadow-sm">
-                    KAHURIPAN ADMINISTRATIVE MAP
+                {/* Official Administrative Map Image */}
+                <div className="relative rounded-3xl overflow-hidden border border-warm-brown-200 bg-warm-brown-100/50 shadow-md group dark:bg-warm-brown-900/30 dark:border-warm-brown-850">
+                  <div className="absolute top-4 left-4 z-10">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold bg-warm-brown-950/90 text-warm-brown-100 rounded-xl px-3 py-1.5 backdrop-blur-md shadow-md">
+                      PETA ADMINISTRASI RESMI
+                    </span>
                   </div>
 
-                  <svg className="w-full h-full max-w-[280px] text-warm-brown-300 dark:text-warm-brown-850 filter drop-shadow-lg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* Kelurahan shape */}
-                    <path d="M10 25 L35 15 L75 10 L90 45 L80 85 L45 90 L20 80 Z" fill="currentColor" className="fill-warm-brown-200/40 dark:fill-warm-brown-800/10" stroke="var(--warm-brown-500)" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <div className="relative h-72 sm:h-80 w-full overflow-hidden">
+                    <img
+                      src="/peta-administrasi.png"
+                      alt="Peta Administrasi Kota Tasikmalaya - Wilayah Tawang & Cihideung"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-warm-brown-950/80 via-transparent to-transparent opacity-80"></div>
+                  </div>
 
-                    {/* RW Divisions inside */}
-                    <path d="M35 15 L45 45 L20 80" stroke="var(--warm-brown-300)" strokeWidth="0.8" />
-                    <path d="M45 45 L80 85" stroke="var(--warm-brown-300)" strokeWidth="0.8" />
-                    <path d="M45 45 L75 10" stroke="var(--warm-brown-300)" strokeWidth="0.8" />
-
-                    {/* Sentra Pins */}
-                    <circle cx="28" cy="30" r="3" fill="#d97706" className="animate-ping" />
-                    <circle cx="28" cy="30" r="2.5" fill="#d97706" />
-                    <text x="33" y="32" className="text-[5px] font-bold fill-warm-brown-700 dark:fill-warm-brown-300">Sentra Kuliner</text>
-
-                    <circle cx="60" cy="55" r="3" fill="#834f30" />
-                    <circle cx="60" cy="55" r="2.5" fill="#834f30" />
-                    <text x="65" y="57" className="text-[5px] font-bold fill-warm-brown-700 dark:fill-warm-brown-300">Sentra Kelom</text>
-
-                    <circle cx="45" cy="75" r="3" fill="#d97706" />
-                    <circle cx="45" cy="75" r="2.5" fill="#d97706" />
-                    <text x="50" y="77" className="text-[5px] font-bold fill-warm-brown-700 dark:fill-warm-brown-300">Bordir & Kebaya</text>
-                  </svg>
-
-                  <div className="absolute bottom-4 right-4 text-[10px] text-warm-brown-500 dark:text-warm-brown-400 italic">
-                    Skala 1:12.500
+                  <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end text-white z-10">
+                    <div>
+                      <h4 className="text-sm font-extrabold tracking-wide drop-shadow">
+                        Kota Tasikmalaya
+                      </h4>
+                      <p className="text-[11px] text-warm-brown-200 drop-shadow">
+                        Kecamatan Tawang & Cihideung
+                      </p>
+                    </div>
+                    <a
+                      href="/peta-administrasi.png"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/90 text-warm-brown-900 px-2.5 py-1 rounded-lg hover:bg-white transition-colors shadow-sm"
+                    >
+                      Buka Peta Penuh
+                    </a>
                   </div>
                 </div>
 
                 {/* Achievements list */}
                 <div className="space-y-4">
                   <h4 className="text-md font-bold text-warm-brown-850 dark:text-warm-brown-200">
-                    Prestasi Kelurahan
+                    Prestasi Wilayah
                   </h4>
                   <div className="flex gap-4 items-start bg-white p-4 rounded-2xl border border-warm-brown-200 shadow-sm dark:bg-warm-brown-900 dark:border-warm-brown-850">
                     <div className="p-2.5 bg-yellow-50 text-yellow-600 rounded-xl dark:bg-yellow-950/20 dark:text-yellow-400">

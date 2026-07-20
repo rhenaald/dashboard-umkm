@@ -82,7 +82,7 @@ export default async function StatistikPage() {
             Statistik Pertumbuhan Ekonomi Lokal
           </h1>
           <p className="mt-2 text-sm text-warm-brown-600 dark:text-warm-brown-400">
-            Pemantauan transparan sebaran kategori usaha, status legalitas perizinan, dan kepesertaan pelatihan UMKM Kelurahan Kahuripan.
+            Pemantauan transparan sebaran kategori usaha, status legalitas perizinan, dan kepesertaan pelatihan UMKM Wilayah Kecamatan Tawang & Cihideung, Kota Tasikmalaya.
           </p>
         </div>
 

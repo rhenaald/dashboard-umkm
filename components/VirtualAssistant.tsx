@@ -25,10 +25,10 @@ const chatbotReplies: { [key: string]: { text: string; links?: { label: string; 
     links: [{ label: 'Daftar Halal di SIHALAL', url: 'https://ptsp.halal.go.id' }]
   },
   'panduan kbli': {
-    text: 'KBLI (Klasifikasi Baku Lapangan Usaha Indonesia) menentukan kode aktivitas ekonomi usaha Anda. Contoh kode populer di Kahuripan:\n- 56101: Kedai Makanan (Bakso, Warung Nasi)\n- 13921: Kerajinan Bordir Tasik\n- 16292: Kerajinan Kelom Geulis & Kerajinan Kayu\n- 47711: Toko Pakaian / Jilbab\n\nGunakan kotak pencarian KBLI di halaman Layanan Publik untuk mencari kode bidang usaha Anda secara spesifik!',
+    text: 'KBLI (Klasifikasi Baku Lapangan Usaha Indonesia) menentukan kode aktivitas ekonomi usaha Anda. Contoh kode populer di Tawang & Cihideung:\n- 56101: Kedai Makanan (Bakso, Warung Nasi)\n- 13921: Kerajinan Bordir Tasik\n- 16292: Kerajinan Kelom Geulis & Kerajinan Kayu\n- 47711: Toko Pakaian / Jilbab\n\nGunakan kotak pencarian KBLI di halaman Layanan Publik untuk mencari kode bidang usaha Anda secara spesifik!',
   },
   'program bantuan umkm': {
-    text: 'Kelurahan Kahuripan dan Dinas Koperasi, UMKM & Perindustrian Kota Tasikmalaya menyediakan berbagai program bantuan tahun 2026:\n1. Fasilitasi Pembuatan Sertifikat Halal Massal (SEHATI).\n2. Pelatihan Pemasaran Digital & Ekspor Kelom Geulis (Agustus 2026).\n3. Program Permodalan Tanpa Jaminan "Kredit Mesra" Bank BJB.\n\nHubungi Sekretariat Kelurahan untuk pendaftaran bantuan aktif!',
+    text: 'Pemerintah Kota Tasikmalaya (Kecamatan Tawang & Cihideung) dan Dinas Koperasi, UMKM & Perindustrian menyediakan berbagai program bantuan tahun 2026:\n1. Fasilitasi Pembuatan Sertifikat Halal Massal (SEHATI).\n2. Pelatihan Pemasaran Digital & Ekspor Kelom Geulis / Bordir.\n3. Program Permodalan Tanpa Jaminan "Kredit Mesra" Bank BJB.\n\nHubungi kantor kecamatan/kelurahan setempat untuk pendaftaran bantuan aktif!',
     links: [{ label: 'Layanan Bantuan BJB Mesra', url: 'https://bankbjb.co.id/personal/kredit-mesra' }]
   }
 };

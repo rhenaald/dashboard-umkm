@@ -135,7 +135,7 @@ export default function LayananPublikPage() {
             </div>
 
             <p className="text-xs text-warm-brown-650 dark:text-warm-brown-400 leading-relaxed mb-4">
-              KBLI adalah klasifikasi standar kegiatan usaha. Pelaku usaha di Kelurahan Kahuripan wajib mengisi kode KBLI yang cocok saat membuat NIB. Cari kode di bawah ini:
+              KBLI adalah klasifikasi standar kegiatan usaha. Pelaku usaha di Wilayah Tawang & Cihideung wajib mengisi kode KBLI yang cocok saat membuat NIB. Cari kode di bawah ini:
             </p>
 
             {/* Search input */}
