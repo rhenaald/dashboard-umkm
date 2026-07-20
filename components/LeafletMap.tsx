@@ -23,7 +23,7 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 // Custom icons for specific categories
-const culinaryIcon = L.icon({
+const kulinerIcon = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
   shadowUrl: markerShadow.src,
   iconSize: [25, 41],
@@ -32,7 +32,34 @@ const culinaryIcon = L.icon({
   shadowSize: [41, 41]
 });
 
-const otherIcon = L.icon({
+const jasaIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: markerShadow.src,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const fesyenIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+  shadowUrl: markerShadow.src,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const kerajinanIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+  shadowUrl: markerShadow.src,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const perdaganganIcon = L.icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png',
   shadowUrl: markerShadow.src,
   iconSize: [25, 41],
@@ -40,6 +67,15 @@ const otherIcon = L.icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
+
+function getCategoryIcon(kategori: string) {
+  const cat = (kategori || '').toLowerCase();
+  if (cat.includes('kuliner')) return kulinerIcon;
+  if (cat.includes('jasa')) return jasaIcon;
+  if (cat.includes('fesyen') || cat.includes('fashion')) return fesyenIcon;
+  if (cat.includes('kerajinan')) return kerajinanIcon;
+  return perdaganganIcon;
+}
 
 interface LeafletMapProps {
   umkmList: Umkm[];
@@ -76,15 +112,14 @@ export default function LeafletMap({ umkmList, activeCenter, activeZoom, selecte
 
         {/* Render Markers */}
         {umkmList.map((umkm) => {
-          const isCulinary = umkm.kategori === 'Kuliner';
-          const isSelected = umkm.id === selectedId;
+          const icon = getCategoryIcon(umkm.kategori);
           const pos: [number, number] = [umkm.latitude, umkm.longitude];
           
           return (
             <Marker 
               key={umkm.id} 
               position={pos}
-              icon={isCulinary ? culinaryIcon : otherIcon}
+              icon={icon}
             >
               <Popup>
                 <div className="p-1 min-w-[200px]">
