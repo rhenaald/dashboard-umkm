@@ -23,7 +23,7 @@ export default async function AdminPage() {
             Kelola Data Direktori UMKM
           </h1>
           <p className="mt-2 text-sm text-warm-brown-600 dark:text-warm-brown-400">
-            Halaman administrasi internal wilayah Tawang & Cihideung. Anda dapat melakukan pengelolaan penuh (Create, Read, Update, Delete) data direktori pelaku usaha lokal di bawah ini.
+            Kelola data direktori UMKM di wilayah Kecamatan Tawang dan Kecamatan Cihideung secara mudah dan terpusat. Pastikan data pelaku usaha selalu akurat, lengkap, dan terkini.
           </p>
         </div>
 
