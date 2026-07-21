@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Store, ShieldAlert, ArrowRight, Lock, User } from 'lucide-react';
+import { Store, ShieldAlert, ArrowRight, Lock, User, Eye, EyeOff } from 'lucide-react';
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ export default function LoginPage() {
   return (
     <div className="flex-1 min-h-[calc(100vh-4rem)] flex items-center justify-center bg-warm-brown-100 py-12 px-4 sm:px-6 lg:px-8 dark:bg-warm-brown-950 transition-colors duration-300">
       <div className="max-w-md w-full space-y-8 bg-white border border-warm-brown-200/80 p-8 sm:p-10 rounded-3xl shadow-xl dark:bg-warm-brown-900 dark:border-warm-brown-850">
-        
+
         {/* Brand Header */}
         <div className="text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-warm-brown-700 text-warm-brown-50 shadow-md">
@@ -58,7 +60,7 @@ export default function LoginPage() {
 
         {/* Login Form */}
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-          
+
           {/* Error Alert */}
           {error && (
             <div className="flex items-start gap-2.5 rounded-2xl bg-red-50 p-3.5 text-xs text-red-800 dark:bg-red-950/20 dark:text-red-400 border border-red-200/30">
@@ -96,13 +98,22 @@ export default function LoginPage() {
                   <Lock size={16} />
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Masukkan password admin"
-                  className="w-full rounded-xl border border-warm-brown-200 bg-white/70 py-2.5 pl-10 pr-4 text-xs font-medium text-warm-brown-900 placeholder-warm-brown-400 focus:border-warm-brown-650 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200 dark:placeholder-warm-brown-600 shadow-inner"
+                  className="w-full rounded-xl border border-warm-brown-200 bg-white/70 py-2.5 pl-10 pr-10 text-xs font-medium text-warm-brown-900 placeholder-warm-brown-400 focus:border-warm-brown-650 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200 dark:placeholder-warm-brown-600 shadow-inner"
                 />
+                {password.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-warm-brown-450 hover:text-warm-brown-650 cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                )}
               </div>
             </div>
           </div>
