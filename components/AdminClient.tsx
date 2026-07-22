@@ -31,24 +31,6 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
     setIsDetailModalOpen(true);
   };
 
-  const handleLogout = async () => {
-    if (!confirm('Apakah Anda yakin ingin keluar dari panel admin?')) return;
-
-    try {
-      const res = await fetch('/api/auth/logout', {
-        method: 'POST'
-      });
-      if (res.ok) {
-        router.push('/login');
-        router.refresh();
-      } else {
-        alert('Gagal melakukan logout.');
-      }
-    } catch (e) {
-      console.error(e);
-      alert('Terjadi kesalahan koneksi.');
-    }
-  };
 
   // Form State for Create / Edit
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -281,15 +263,6 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
           >
             <Plus size={16} />
             Tambah UMKM
-          </button>
-
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="rounded-xl border border-red-200 hover:bg-red-50 text-red-650 px-4 py-2 text-xs font-bold shadow-sm flex items-center gap-1.5 transition-colors dark:border-red-950 dark:hover:bg-red-950/20"
-          >
-            <LogOut size={14} />
-            Keluar
           </button>
         </div>
       </div>
