@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAdminByUsername } from '@/app/utils/db';
-import crypto from 'crypto';
+import { verifyPassword, signSession } from '@/app/utils/auth';
 
 export async function POST(request: Request) {
   try {
@@ -16,18 +16,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Username atau password salah.' }, { status: 401 });
     }
 
-    const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
-
-    if (admin.password !== hashedPassword) {
+    if (!verifyPassword(password, admin.password)) {
       return NextResponse.json({ error: 'Username atau password salah.' }, { status: 401 });
     }
 
     const response = NextResponse.json({ success: true, message: 'Berhasil masuk.' });
     
+    // Generate secure signed session token
+    const token = signSession(username);
+
     // Set admin_session HttpOnly cookie
     response.cookies.set({
       name: 'admin_session',
-      value: 'authenticated',
+      value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

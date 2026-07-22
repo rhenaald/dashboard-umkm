@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Search, Menu, X, Store, BarChart3, MapPin, Landmark, ShieldCheck, Sliders } from 'lucide-react';
+import { Search, Menu, X, Store, BarChart3, MapPin, Landmark, ShieldCheck, Sliders, LogIn, LogOut } from 'lucide-react';
 
 // Isolated search component that uses searchParams
 function NavbarSearch() {
@@ -50,7 +50,40 @@ function NavbarSearch() {
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/auth/status');
+        if (res.ok) {
+          const data = await res.json();
+          setIsAuthenticated(data.isAuthenticated);
+        }
+      } catch (err) {
+        console.error('Error fetching auth status:', err);
+      }
+    }
+    checkAuth();
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/auth/logout', { method: 'POST' });
+      if (res.ok) {
+        setIsAuthenticated(false);
+        router.push('/');
+        router.refresh();
+      } else {
+        alert('Gagal keluar.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Terjadi kesalahan jaringan.');
+    }
+  };
 
   const navLinks = [
     { name: 'Beranda', href: '/', icon: Store },
@@ -60,6 +93,14 @@ export default function Navbar() {
     { name: 'Monitoring Desil', href: '/monitoring', icon: ShieldCheck },
     { name: 'Kelola Data', href: '/admin', icon: Sliders },
   ];
+
+  // Filter links based on authentication status to hide admin links from public users
+  const visibleLinks = navLinks.filter((link) => {
+    if (link.href === '/admin' || link.href === '/monitoring') {
+      return isAuthenticated;
+    }
+    return true;
+  });
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-warm-brown-200/50 bg-warm-brown-50/85 backdrop-blur-md dark:border-warm-brown-850/30 dark:bg-warm-brown-950/80 transition-colors duration-300">
@@ -85,7 +126,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center space-x-1">
-            {navLinks.map((link) => {
+            {visibleLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
               return (
@@ -111,6 +152,27 @@ export default function Navbar() {
             <NavbarSearch />
           </Suspense>
 
+          {/* Premium Auth Action Button (Desktop) */}
+          <div className="hidden lg:block">
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20 cursor-pointer transition-all duration-200"
+              >
+                <LogOut size={16} />
+                Keluar
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold text-warm-brown-700 hover:bg-warm-brown-100 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:bg-warm-brown-900 dark:hover:text-warm-brown-100"
+              >
+                <LogIn size={16} />
+                Masuk
+              </Link>
+            )}
+          </div>
+
           {/* Mobile menu button */}
           <div className="flex lg:hidden">
             <button
@@ -127,7 +189,7 @@ export default function Navbar() {
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div className="lg:hidden px-2 pt-2 pb-3 space-y-1 bg-warm-brown-50/95 dark:bg-warm-brown-950/95 border-b border-warm-brown-200 dark:border-warm-brown-900 animate-fadeIn">
-          {navLinks.map((link) => {
+          {visibleLinks.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
             return (
@@ -145,8 +207,34 @@ export default function Navbar() {
               </Link>
             );
           })}
+          
+          {/* Mobile Auth Button */}
+          <div className="border-t border-warm-brown-200/50 dark:border-warm-brown-850/50 mt-2 pt-2">
+            {isAuthenticated ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-base font-bold text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/20 transition-all cursor-pointer"
+              >
+                <LogOut size={18} />
+                Keluar
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-base font-bold text-warm-brown-750 hover:bg-warm-brown-100 dark:text-warm-brown-250 dark:hover:bg-warm-brown-900"
+              >
+                <LogIn size={18} />
+                Masuk Admin
+              </Link>
+            )}
+          </div>
         </div>
       )}
     </nav>
   );
 }
+

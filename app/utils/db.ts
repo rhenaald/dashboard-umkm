@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { mockUmkmList, Umkm } from './mockData';
+import crypto from 'crypto';
 
 let prisma: PrismaClient | null = null;
 
@@ -141,10 +142,14 @@ export async function getAdminByUsername(username: string): Promise<any> {
   }
   // Fallback for mock environment
   if (username === 'admin') {
+    const mockSalt = 'static_mock_salt_98765';
+    const mockHash = crypto.scryptSync('admin123', mockSalt, 64).toString('hex');
+    const mockPasswordHash = `scrypt$${mockSalt}$${mockHash}`;
+
     return {
       id: 1,
       username: 'admin',
-      password: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', // SHA-256 of 'admin123'
+      password: mockPasswordHash,
       nama: 'Administrator BAKUL'
     };
   }

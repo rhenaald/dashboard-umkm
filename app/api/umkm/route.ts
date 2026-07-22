@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllUmkm, createUmkm, deleteUmkm, updateUmkm } from '@/app/utils/db';
+import { verifySession } from '@/app/utils/auth';
 
 // Read all (GET)
 export async function GET(request: NextRequest) {
@@ -40,6 +41,11 @@ export async function GET(request: NextRequest) {
 
 // Create new (POST)
 export async function POST(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { 
@@ -80,6 +86,11 @@ export async function POST(request: NextRequest) {
 
 // Update existing (PUT)
 export async function PUT(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { id, type, status, ...fields } = body;
@@ -116,6 +127,11 @@ export async function PUT(request: NextRequest) {
 
 // Delete existing (DELETE)
 export async function DELETE(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
