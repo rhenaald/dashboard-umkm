@@ -422,20 +422,20 @@ export default async function Home(props: PageProps) {
                 </p>
               </div>
 
-              <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
 
                 {/* Card 1: Statistik */}
                 <Link
                   href="/statistik"
-                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
+                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
-                    <TrendingUp size={22} />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
+                    <TrendingUp size={20} />
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
+                  <h3 className="mt-3 sm:mt-4 text-sm sm:text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                     Dashboard Statistik
                   </h3>
-                  <p className="mt-2 text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
+                  <p className="mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
                     Sajian grafik sebaran kategori usaha, kepemilikan NIB, dan persentase pelatihan terintegrasi.
                   </p>
                 </Link>
@@ -443,15 +443,15 @@ export default async function Home(props: PageProps) {
                 {/* Card 2: Pemetaan */}
                 <Link
                   href="/peta"
-                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
+                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
-                    <Map size={22} />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
+                    <Map size={20} />
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
+                  <h3 className="mt-3 sm:mt-4 text-sm sm:text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                     Pemetaan Wilayah
                   </h3>
-                  <p className="mt-2 text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
+                  <p className="mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
                     Peta interaktif sebaran pelaku usaha, lengkap dengan pop-up detail dan tabel terintegrasi.
                   </p>
                 </Link>
@@ -459,15 +459,15 @@ export default async function Home(props: PageProps) {
                 {/* Card 3: Layanan Publik */}
                 <Link
                   href="/publik"
-                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
+                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
-                    <Landmark size={22} />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
+                    <Landmark size={20} />
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
+                  <h3 className="mt-3 sm:mt-4 text-sm sm:text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                     Portal Layanan Publik
                   </h3>
-                  <p className="mt-2 text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
+                  <p className="mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
                     Akses cepat pendaftaran NIB, Sertifikasi Halal MUI, panduan KBLI, dan chatbot asisten virtual.
                   </p>
                 </Link>
@@ -475,15 +475,15 @@ export default async function Home(props: PageProps) {
                 {/* Card 4: Monitoring */}
                 <Link
                   href="/monitoring"
-                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
+                  className="group rounded-2xl border border-warm-brown-200/60 bg-white p-4 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 dark:border-warm-brown-800 dark:bg-warm-brown-900/80"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
-                    <ShieldCheck size={22} />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-warm-brown-100 text-warm-brown-700 group-hover:bg-warm-brown-200 transition-colors dark:bg-warm-brown-950 dark:text-warm-brown-400">
+                    <ShieldCheck size={20} />
                   </div>
-                  <h3 className="mt-4 text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
+                  <h3 className="mt-3 sm:mt-4 text-sm sm:text-base font-bold text-warm-brown-900 dark:text-warm-brown-100 group-hover:text-warm-brown-700 dark:group-hover:text-warm-brown-400 transition-colors">
                     Monitoring Kesejahteraan
                   </h3>
-                  <p className="mt-2 text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
+                  <p className="mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-warm-brown-600 dark:text-warm-brown-400 leading-relaxed">
                     Filter desil prioritas bantuan (Desil 1–4) dan tabel validasi status cek lapangan UMKM.
                   </p>
                 </Link>
