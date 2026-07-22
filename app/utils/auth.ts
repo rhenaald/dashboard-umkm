@@ -1,6 +1,9 @@
 import crypto from 'crypto';
 
-const SECRET = process.env.SESSION_SECRET || 'a-very-secure-fallback-secret-for-session-tokens-12345';
+if (!process.env.SESSION_SECRET) {
+  throw new Error('SESSION_SECRET environment variable is required to secure user sessions!');
+}
+const SECRET = process.env.SESSION_SECRET;
 
 /**
  * Hash password using scrypt sync
@@ -90,7 +93,16 @@ export function verifySession(token: string | undefined): boolean {
       .update(payloadB64)
       .digest('base64url');
       
-    if (signature !== expectedSignature) return false;
+    const sigBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expectedSignature);
+    
+    if (sigBuffer.length !== expectedBuffer.length) {
+      return false;
+    }
+    
+    if (!crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+      return false;
+    }
     
     const payloadStr = base64urlDecode(payloadB64);
     const payload = JSON.parse(payloadStr);

@@ -2,13 +2,20 @@ import { PrismaClient } from '@prisma/client';
 import { mockUmkmList, Umkm } from './mockData';
 import crypto from 'crypto';
 
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
+
 let prisma: PrismaClient | null = null;
 
-if (typeof window === 'undefined' && process.env.DATABASE_URL) {
-  try {
-    prisma = new PrismaClient();
-  } catch (e) {
-    console.warn("Failed to initialize Prisma Client, using mock data fallback:", e);
+if (typeof window === 'undefined') {
+  if (process.env.DATABASE_URL) {
+    try {
+      if (!globalForPrisma.prisma) {
+        globalForPrisma.prisma = new PrismaClient();
+      }
+      prisma = globalForPrisma.prisma;
+    } catch (e) {
+      console.warn("Failed to initialize Prisma Client, using mock data fallback:", e);
+    }
   }
 }
 
