@@ -94,7 +94,7 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
     <div className="grid gap-8 lg:grid-cols-12">
 
       {/* Map Display Column (5 cols on Desktop) */}
-      <div id="interactive-map-container" className="lg:col-span-5 h-[450px] lg:h-[640px] relative">
+      <div id="interactive-map-container" className="lg:col-span-5 h-[450px] lg:h-[calc(100vh-140px)] lg:max-h-[600px] relative lg:sticky lg:top-20 self-start">
         <LeafletMap
           umkmList={filteredList}
           activeCenter={mapCenter}
@@ -209,8 +209,8 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
                       key={umkm.id}
                       onClick={() => handleRowClick(umkm)}
                       className={`cursor-pointer transition-colors ${isSelected
-                          ? 'bg-warm-brown-100 text-warm-brown-950 dark:bg-warm-brown-950/40 dark:text-warm-brown-250 font-bold border-l-4 border-l-warm-brown-700'
-                          : 'hover:bg-warm-brown-50 dark:hover:bg-warm-brown-900/60 text-warm-brown-750 dark:text-warm-brown-300'
+                        ? 'bg-warm-brown-100 text-warm-brown-950 dark:bg-warm-brown-950/40 dark:text-warm-brown-250 font-bold border-l-4 border-l-warm-brown-700'
+                        : 'hover:bg-warm-brown-50 dark:hover:bg-warm-brown-900/60 text-warm-brown-750 dark:text-warm-brown-300'
                         }`}
                     >
                       <td className="px-4 py-3.5 text-center font-bold">
@@ -230,8 +230,8 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
                       </td>
                       <td className="px-4 py-3.5">
                         <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_nib === 'Sudah NIB'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
-                            : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
+                          : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
                           }`}>
                           {umkm.status_nib || '-'}
                         </span>

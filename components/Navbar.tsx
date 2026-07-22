@@ -134,8 +134,8 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                      ? 'bg-warm-brown-700 text-warm-brown-50'
-                      : 'text-warm-brown-700 hover:bg-warm-brown-100 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:bg-warm-brown-900 dark:hover:text-warm-brown-100'
+                    ? 'bg-warm-brown-700 text-warm-brown-50'
+                    : 'text-warm-brown-700 hover:bg-warm-brown-100 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:bg-warm-brown-900 dark:hover:text-warm-brown-100'
                     }`}
                 >
                   <Icon size={16} />
@@ -198,8 +198,8 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-base font-medium transition-all ${isActive
-                    ? 'bg-warm-brown-750 text-warm-brown-50'
-                    : 'text-warm-brown-750 hover:bg-warm-brown-100 dark:text-warm-brown-250 dark:hover:bg-warm-brown-900'
+                  ? 'bg-warm-brown-750 text-warm-brown-50'
+                  : 'text-warm-brown-750 hover:bg-warm-brown-100 dark:text-warm-brown-250 dark:hover:bg-warm-brown-900'
                   }`}
               >
                 <Icon size={18} />
@@ -207,7 +207,7 @@ export default function Navbar() {
               </Link>
             );
           })}
-          
+
           {/* Mobile Auth Button */}
           <div className="border-t border-warm-brown-200/50 dark:border-warm-brown-850/50 mt-2 pt-2">
             {isAuthenticated ? (
