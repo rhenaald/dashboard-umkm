@@ -73,6 +73,20 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  // Optional pagination parameters
+  const limitParam = searchParams.get('limit');
+  const pageParam = searchParams.get('page');
+
+  if (limitParam) {
+    const limit = parseInt(limitParam, 10);
+    const page = parseInt(pageParam || '1', 10);
+    if (!isNaN(limit) && limit > 0) {
+      const pageIndex = isNaN(page) || page < 1 ? 0 : page - 1;
+      const start = pageIndex * limit;
+      list = list.slice(start, start + limit);
+    }
+  }
+
   return NextResponse.json(list);
 }
 
