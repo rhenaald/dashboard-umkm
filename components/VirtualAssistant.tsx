@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  MessageSquare, X, Send, User, Landmark, CheckCircle2
+  MessageSquare, X, Send, User, Landmark, CheckCircle2, Bot
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -38,10 +38,11 @@ export default function VirtualAssistant() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: 'bot',
-      text: 'Sampurasun! Saya Asisten BAKUL PELAK, asisten virtual platform ekonomi lokal. Ada yang bisa saya bantu terkait perizinan, sertifikasi halal, atau program UMKM?'
+      text: 'Sampurasun! Saya Asisten Virtual BAKUL PELAK bertenaga Gemini AI. Saya dapat menjawab pertanyaan seputar data UMKM terdaftar, perizinan NIB, sertifikasi halal, maupun program bantuan!'
     }
   ]);
   const [chatInput, setChatInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll Chat to Bottom
@@ -49,43 +50,62 @@ export default function VirtualAssistant() {
     if (isOpen) {
       chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isOpen]);
+  }, [messages, isOpen, isLoading]);
 
-  const triggerBotReply = (key: string, userText: string) => {
-    // Add user message
+  const sendMessageToAi = async (userText: string, ruleKeyFallback?: string) => {
+    if (!userText.trim() || isLoading) return;
+
+    // 1. Add user message
     setMessages(prev => [...prev, { sender: 'user', text: userText }]);
+    setIsLoading(true);
 
-    // Add bot reply typing state
-    setTimeout(() => {
-      const match = chatbotReplies[key];
-      if (match) {
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(prev => [...prev, { sender: 'bot', text: data.reply }]);
+      } else {
+        throw new Error('API request failed');
+      }
+    } catch (err) {
+      console.warn('Gemini API call failed, falling back to rule-based response:', err);
+      // Fallback to rule-based matching if API request fails
+      if (ruleKeyFallback && chatbotReplies[ruleKeyFallback]) {
+        const match = chatbotReplies[ruleKeyFallback];
         setMessages(prev => [...prev, { sender: 'bot', text: match.text, links: match.links }]);
       } else {
         setMessages(prev => [...prev, {
           sender: 'bot',
-          text: 'Maaf, saya tidak mengerti pertanyaan tersebut. Silakan pilih salah satu pertanyaan populer di bawah chat untuk jawaban cepat yang informatif.'
+          text: 'Maaf, terjadi kendala saat menghubungkan ke Asisten AI. Silakan pastikan koneksi internet Anda lancar.'
         }]);
       }
-    }, 600);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCustomChatSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || isLoading) return;
 
-    const queryNormalized = chatInput.toLowerCase().trim();
+    const userText = chatInput;
+    setChatInput('');
+
+    // Normalize text for potential fallback key
+    const queryNormalized = userText.toLowerCase().trim();
     let matchedKey = '';
-
-    // Check key containment
     if (queryNormalized.includes('syarat nib') || queryNormalized.includes('persyaratan nib')) matchedKey = 'persyaratan nib';
     else if (queryNormalized.includes('cara buat nib') || queryNormalized.includes('langkah nib') || queryNormalized.includes('langkah-langkah nib')) matchedKey = 'langkah-langkah nib';
     else if (queryNormalized.includes('halal') || queryNormalized.includes('syarat halal')) matchedKey = 'persyaratan halal';
     else if (queryNormalized.includes('kbli') || queryNormalized.includes('kode kbli')) matchedKey = 'panduan kbli';
     else if (queryNormalized.includes('bantuan') || queryNormalized.includes('program bantuan')) matchedKey = 'program bantuan umkm';
 
-    const userText = chatInput;
-    setChatInput('');
-    triggerBotReply(matchedKey, userText);
+    sendMessageToAi(userText, matchedKey);
   };
 
   return (
@@ -98,15 +118,15 @@ export default function VirtualAssistant() {
           <div className="bg-warm-brown-100 p-4 text-warm-brown-900 border-b border-warm-brown-200 flex items-center justify-between dark:bg-warm-brown-950 dark:border-warm-brown-850">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-warm-brown-200 flex items-center justify-center border border-warm-brown-300 text-warm-brown-700 shadow-inner dark:bg-warm-brown-900 dark:border-warm-brown-800 dark:text-warm-brown-300">
-                <MessageSquare size={22} className="text-warm-brown-600 animate-pulse dark:text-warm-brown-400" />
+                <Bot size={22} className="text-warm-brown-700 animate-pulse dark:text-warm-brown-300" />
               </div>
               <div>
                 <h3 className="text-sm font-bold tracking-wide text-warm-brown-900 dark:text-warm-brown-100">
-                  Asisten Virtual BAKUL PELAK
+                  Asisten AI BAKUL PELAK
                 </h3>
                 <div className="flex items-center gap-1">
                   <span className="block h-2 w-2 rounded-full bg-green-500 animate-ping"></span>
-                  <span className="text-[10px] text-warm-brown-500 font-bold uppercase dark:text-warm-brown-400">Online</span>
+                  <span className="text-[10px] text-warm-brown-600 font-bold uppercase dark:text-warm-brown-400">Gemini AI Online</span>
                 </div>
               </div>
             </div>
@@ -161,6 +181,20 @@ export default function VirtualAssistant() {
                 </div>
               </div>
             ))}
+
+            {/* AI Typing Loading Indicator */}
+            {isLoading && (
+              <div className="flex items-end gap-2 max-w-[85%] mr-auto">
+                <div className="h-7 w-7 rounded-lg bg-warm-brown-100 text-warm-brown-700 dark:bg-warm-brown-800 dark:text-warm-brown-300 flex items-center justify-center text-xs flex-shrink-0">
+                  <Landmark size={14} />
+                </div>
+                <div className="rounded-2xl rounded-bl-none px-3.5 py-2.5 bg-warm-brown-100/60 text-xs shadow-sm flex items-center gap-1.5 text-warm-brown-600 dark:bg-warm-brown-950/40 dark:text-warm-brown-400">
+                  <span className="h-2 w-2 rounded-full bg-warm-brown-600 dark:bg-warm-brown-400 animate-bounce"></span>
+                  <span className="h-2 w-2 rounded-full bg-warm-brown-600 dark:bg-warm-brown-400 animate-bounce [animation-delay:0.2s]"></span>
+                  <span className="h-2 w-2 rounded-full bg-warm-brown-600 dark:bg-warm-brown-400 animate-bounce [animation-delay:0.4s]"></span>
+                </div>
+              </div>
+            )}
             <div ref={chatEndRef} />
           </div>
 
@@ -170,34 +204,32 @@ export default function VirtualAssistant() {
             {/* Quick Pills */}
             <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
               <button
-                onClick={() => triggerBotReply('persyaratan nib', 'Persyaratan NIB')}
-                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm"
+                onClick={() => sendMessageToAi('Berapa jumlah UMKM yang sudah dan belum NIB di database?', 'persyaratan nib')}
+                disabled={isLoading}
+                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 disabled:opacity-50 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm cursor-pointer"
+              >
+                Data NIB UMKM
+              </button>
+              <button
+                onClick={() => sendMessageToAi('Apa saja jenis kategori usaha terdaftar di BAKUL PELAK?', 'panduan kbli')}
+                disabled={isLoading}
+                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 disabled:opacity-50 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm cursor-pointer"
+              >
+                Kategori UMKM
+              </button>
+              <button
+                onClick={() => sendMessageToAi('Bagaimana cara daftar NIB gratis di OSS?', 'persyaratan nib')}
+                disabled={isLoading}
+                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 disabled:opacity-50 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm cursor-pointer"
               >
                 Syarat NIB
               </button>
               <button
-                onClick={() => triggerBotReply('langkah-langkah nib', 'Langkah NIB')}
-                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm"
-              >
-                Langkah NIB
-              </button>
-              <button
-                onClick={() => triggerBotReply('persyaratan halal', 'Persyaratan Halal')}
-                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm"
+                onClick={() => sendMessageToAi('Bagaimana alur pendaftaran Sertifikat Halal gratis (SEHATI)?', 'persyaratan halal')}
+                disabled={isLoading}
+                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 disabled:opacity-50 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm cursor-pointer"
               >
                 Syarat Halal
-              </button>
-              <button
-                onClick={() => triggerBotReply('panduan kbli', 'Panduan KBLI')}
-                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm"
-              >
-                Panduan KBLI
-              </button>
-              <button
-                onClick={() => triggerBotReply('program bantuan umkm', 'Program Bantuan UMKM')}
-                className="rounded-lg border border-warm-brown-200 bg-white px-2.5 py-1 text-[10px] font-bold text-warm-brown-750 hover:bg-warm-brown-100 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-350 dark:hover:bg-warm-brown-800 shadow-sm"
-              >
-                Bantuan
               </button>
             </div>
 
@@ -207,12 +239,14 @@ export default function VirtualAssistant() {
                 type="text"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
-                placeholder="Tanya perihal KBLI, NIB, Halal..."
-                className="flex-1 rounded-xl border border-warm-brown-200 bg-white py-1.5 px-3 text-xs text-warm-brown-900 placeholder-warm-brown-450 focus:border-warm-brown-600 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-250 dark:placeholder-warm-brown-600 shadow-inner"
+                placeholder="Tanya data UMKM, NIB, Halal, KBLI..."
+                disabled={isLoading}
+                className="flex-1 rounded-xl border border-warm-brown-200 bg-white py-1.5 px-3 text-xs text-warm-brown-900 placeholder-warm-brown-450 focus:border-warm-brown-600 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-250 dark:placeholder-warm-brown-600 shadow-inner disabled:opacity-60"
               />
               <button
                 type="submit"
-                className="rounded-xl bg-warm-brown-700 hover:bg-warm-brown-800 p-2 text-white shadow-sm transition-colors flex items-center justify-center"
+                disabled={isLoading || !chatInput.trim()}
+                className="rounded-xl bg-warm-brown-700 hover:bg-warm-brown-800 p-2 text-white shadow-sm transition-colors flex items-center justify-center disabled:opacity-50 cursor-pointer"
               >
                 <Send size={14} />
               </button>
@@ -224,11 +258,11 @@ export default function VirtualAssistant() {
       {/* Floating Action Button (FAB) */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative flex items-center justify-center h-14 w-14 rounded-full bg-warm-brown-700 hover:bg-warm-brown-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 animate-bounce-short"
+        className="group relative flex items-center justify-center h-14 w-14 rounded-full bg-warm-brown-700 hover:bg-warm-brown-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 animate-bounce-short cursor-pointer"
         aria-label="Tanya Asisten Virtual BAKUL PELAK"
       >
         <span className="absolute right-16 bg-warm-brown-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-warm-brown-950">
-          Tanya Asisten BAKUL PELAK
+          Tanya Asisten AI BAKUL PELAK
         </span>
         {isOpen ? (
           <X size={24} className="animate-in spin-in-90 duration-200" />

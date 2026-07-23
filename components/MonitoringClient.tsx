@@ -9,6 +9,7 @@ import {
   ShieldCheck, AlertTriangle, CheckCircle2, UserCheck,
   Filter, Calendar, MapPin, RefreshCw
 } from 'lucide-react';
+import CustomDropdown from './CustomDropdown';
 
 interface MonitoringClientProps {
   initialUmkmList: Umkm[];
@@ -34,6 +35,16 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
   // Extract unique kecamatan and years for dropdown filters
   const kecamatans = Array.from(new Set(initialUmkmList.map(item => item.kecamatan).filter((k): k is string => Boolean(k))));
   const years = Array.from(new Set(initialUmkmList.map(item => item.tahun_laporan).filter((yr): yr is number => yr !== null && yr !== undefined))).sort();
+
+  const kecamatanOptions = [
+    { value: '', label: `Semua Kecamatan (${kecamatans.length})` },
+    ...kecamatans.map(kec => ({ value: kec, label: kec }))
+  ];
+
+  const yearOptions = [
+    { value: '', label: `Semua Laporan (${years.length})` },
+    ...years.map(yr => ({ value: String(yr), label: String(yr) }))
+  ];
 
   // Apply filters
   const filteredList = umkmList.filter(item => {
@@ -138,32 +149,22 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
           <div className="flex items-center gap-2">
             <Filter size={16} className="text-warm-brown-600 dark:text-warm-brown-400" />
             <span className="text-xs font-bold text-warm-brown-650 dark:text-warm-brown-400 uppercase tracking-wider">Kecamatan:</span>
-            <select
+            <CustomDropdown
               value={selectedKecamatan}
-              onChange={(e) => setSelectedKecamatan(e.target.value)}
-              className="rounded-xl border border-warm-brown-200 bg-white px-3 py-1.5 text-xs font-bold text-warm-brown-800 focus:border-warm-brown-600 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-250"
-            >
-              <option value="">Semua Kecamatan ({kecamatans.length})</option>
-              {kecamatans.map((kec) => (
-                <option key={kec} value={kec}>{kec}</option>
-              ))}
-            </select>
+              onChange={setSelectedKecamatan}
+              options={kecamatanOptions}
+            />
           </div>
 
           {/* Year filter */}
           <div className="flex items-center gap-2">
             <Calendar size={16} className="text-warm-brown-600 dark:text-warm-brown-400" />
             <span className="text-xs font-bold text-warm-brown-650 dark:text-warm-brown-400 uppercase tracking-wider">Tahun:</span>
-            <select
+            <CustomDropdown
               value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="rounded-xl border border-warm-brown-200 bg-white px-3 py-1.5 text-xs font-bold text-warm-brown-800 focus:border-warm-brown-600 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-250"
-            >
-              <option value="">Semua Laporan ({years.length})</option>
-              {years.map((yr) => (
-                <option key={yr} value={yr}>{yr}</option>
-              ))}
-            </select>
+              onChange={setSelectedYear}
+              options={yearOptions}
+            />
           </div>
 
         </div>

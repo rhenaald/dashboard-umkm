@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { Umkm } from '@/app/utils/mockData';
 import { MapPin, Search, ChevronLeft, ChevronRight, RefreshCw, Layers } from 'lucide-react';
+import CustomDropdown from './CustomDropdown';
 
 // Dynamic import of LeafletMap to prevent SSR window reference crashes
 const LeafletMap = dynamic(
@@ -41,6 +42,22 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
   // Filter list of categories & kecamatans
   const categories = Array.from(new Set(initialUmkmList.map(item => item.kategori).filter(Boolean)));
   const kecamatans = Array.from(new Set(initialUmkmList.map(item => item.kecamatan).filter(Boolean)));
+
+  const kecamatanOptions = [
+    { value: '', label: `Semua Kecamatan (${kecamatans.length})` },
+    ...kecamatans.map(kec => ({
+      value: kec,
+      label: `${kec} (${initialUmkmList.filter(i => i.kecamatan === kec).length})`
+    }))
+  ];
+
+  const kategoriOptions = [
+    { value: '', label: 'Semua Kategori' },
+    ...categories.map(cat => ({
+      value: cat,
+      label: cat
+    }))
+  ];
 
   // Filter list of UMKM based on Search (Navbar) + Category + Kecamatan
   const filteredList = initialUmkmList.filter(item => {
@@ -145,41 +162,27 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
 
         {/* Filtering Options */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-row items-center gap-3">
             <div className="flex items-center gap-1.5">
-              <label className="text-xs font-bold text-warm-brown-600 dark:text-warm-brown-400 uppercase tracking-wide">
+              <label className="text-xs font-bold text-warm-brown-600 dark:text-warm-brown-400 uppercase tracking-wide shrink-0">
                 Kecamatan:
               </label>
-              <select
+              <CustomDropdown
                 value={selectedKecamatan}
-                onChange={(e) => setSelectedKecamatan(e.target.value)}
-                className="rounded-xl border border-warm-brown-200 bg-white px-3 py-1.5 text-xs font-bold text-warm-brown-800 focus:border-warm-brown-600 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-200"
-              >
-                <option value="">Semua Kecamatan ({kecamatans.length})</option>
-                {kecamatans.map((kec) => (
-                  <option key={kec} value={kec}>
-                    {kec} ({initialUmkmList.filter(i => i.kecamatan === kec).length})
-                  </option>
-                ))}
-              </select>
+                onChange={setSelectedKecamatan}
+                options={kecamatanOptions}
+              />
             </div>
 
             <div className="flex items-center gap-1.5">
-              <label className="text-xs font-bold text-warm-brown-600 dark:text-warm-brown-400 uppercase tracking-wide">
+              <label className="text-xs font-bold text-warm-brown-600 dark:text-warm-brown-400 uppercase tracking-wide shrink-0">
                 Kategori:
               </label>
-              <select
+              <CustomDropdown
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="rounded-xl border border-warm-brown-200 bg-white px-3 py-1.5 text-xs font-bold text-warm-brown-800 focus:border-warm-brown-600 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-200"
-              >
-                <option value="">Semua Kategori</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+                onChange={setSelectedCategory}
+                options={kategoriOptions}
+              />
             </div>
           </div>
 
@@ -209,8 +212,8 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
                       key={umkm.id}
                       onClick={() => handleRowClick(umkm)}
                       className={`cursor-pointer transition-colors ${isSelected
-                          ? 'bg-warm-brown-100 text-warm-brown-950 dark:bg-warm-brown-950/40 dark:text-warm-brown-250 font-bold border-l-4 border-l-warm-brown-700'
-                          : 'hover:bg-warm-brown-50 dark:hover:bg-warm-brown-900/60 text-warm-brown-750 dark:text-warm-brown-300'
+                        ? 'bg-warm-brown-100 text-warm-brown-950 dark:bg-warm-brown-950/40 dark:text-warm-brown-250 font-bold border-l-4 border-l-warm-brown-700'
+                        : 'hover:bg-warm-brown-50 dark:hover:bg-warm-brown-900/60 text-warm-brown-750 dark:text-warm-brown-300'
                         }`}
                     >
                       <td className="px-4 py-3.5 text-center font-bold">
@@ -230,8 +233,8 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
                       </td>
                       <td className="px-4 py-3.5">
                         <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${umkm.status_nib === 'Sudah NIB'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
-                            : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
+                          : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-950/40 dark:text-warm-brown-300'
                           }`}>
                           {umkm.status_nib || '-'}
                         </span>

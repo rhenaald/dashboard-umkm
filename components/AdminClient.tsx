@@ -9,6 +9,7 @@ import {
   GraduationCap, Sliders, ChevronLeft, ChevronRight, LogOut,
   Eye, ExternalLink, MapPin
 } from 'lucide-react';
+import CustomDropdown from './CustomDropdown';
 
 interface AdminClientProps {
   initialUmkmList: Umkm[];
@@ -81,6 +82,11 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
 
   // Unique categories list
   const categories = ['Kuliner', 'Fesyen', 'Kerajinan', 'Jasa', 'Pertanian'];
+
+  const categoryOptions = [
+    { value: '', label: 'Semua Kategori' },
+    ...categories.map(cat => ({ value: cat, label: cat }))
+  ];
 
   // Filter list
   const filteredList = umkmList.filter(item => {
@@ -259,16 +265,11 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
           {/* Category Dropdown */}
           <div className="flex items-center gap-2">
             <Filter size={14} className="text-warm-brown-600 dark:text-warm-brown-400" />
-            <select
+            <CustomDropdown
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="rounded-xl border border-warm-brown-200 bg-white px-3 py-1.5 text-xs font-bold text-warm-brown-800 focus:border-warm-brown-650 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"
-            >
-              <option value="">Semua Kategori</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+              onChange={setSelectedCategory}
+              options={categoryOptions}
+            />
           </div>
 
         </div>
