@@ -1,4 +1,7 @@
 import React from 'react';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { verifySession } from '@/app/utils/auth';
 import { getAllUmkm } from '@/app/utils/db';
 import AdminClient from '@/components/AdminClient';
 
@@ -8,6 +11,12 @@ export const metadata = {
 };
 
 export default async function AdminPage() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    redirect('/login?from=/admin');
+  }
+
   const allUmkm = await getAllUmkm();
 
   return (
@@ -23,7 +32,7 @@ export default async function AdminPage() {
             Kelola Data Direktori UMKM
           </h1>
           <p className="mt-2 text-sm text-warm-brown-600 dark:text-warm-brown-400">
-            Halaman administrasi internal wilayah Tawang & Cihideung. Anda dapat melakukan pengelolaan penuh (Create, Read, Update, Delete) data direktori pelaku usaha lokal di bawah ini.
+            Kelola data direktori UMKM di wilayah Kecamatan Tawang dan Kecamatan Cihideung secara mudah dan terpusat. Pastikan data pelaku usaha selalu akurat, lengkap, dan terkini.
           </p>
         </div>
 

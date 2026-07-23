@@ -139,7 +139,9 @@ async function main() {
   
   // Seed default admin user if not exists
   const defaultAdminUsername = 'admin';
-  const defaultAdminPassword = crypto.createHash('sha256').update('admin123').digest('hex');
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync('admin123', salt, 64).toString('hex');
+  const defaultAdminPassword = `scrypt$${salt}$${hash}`;
 
   await prisma.admin.upsert({
     where: { username: defaultAdminUsername },

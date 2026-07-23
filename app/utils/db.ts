@@ -1,13 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import { mockUmkmList, Umkm } from './mockData';
+import crypto from 'crypto';
+
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
 let prisma: PrismaClient | null = null;
 
-if (typeof window === 'undefined' && process.env.DATABASE_URL) {
-  try {
-    prisma = new PrismaClient();
-  } catch (e) {
-    console.warn("Failed to initialize Prisma Client, using mock data fallback:", e);
+if (typeof window === 'undefined') {
+  if (process.env.DATABASE_URL) {
+    try {
+      if (!globalForPrisma.prisma) {
+        globalForPrisma.prisma = new PrismaClient();
+      }
+      prisma = globalForPrisma.prisma;
+    } catch (e) {
+      console.warn("Failed to initialize Prisma Client, using mock data fallback:", e);
+    }
   }
 }
 
@@ -141,10 +149,14 @@ export async function getAdminByUsername(username: string): Promise<any> {
   }
   // Fallback for mock environment
   if (username === 'admin') {
+    const mockSalt = 'static_mock_salt_98765';
+    const mockHash = crypto.scryptSync('admin123', mockSalt, 64).toString('hex');
+    const mockPasswordHash = `scrypt$${mockSalt}$${mockHash}`;
+
     return {
       id: 1,
       username: 'admin',
-      password: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', // SHA-256 of 'admin123'
+      password: mockPasswordHash,
       nama: 'Administrator BAKUL'
     };
   }

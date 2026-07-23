@@ -111,7 +111,7 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
     <div className="grid gap-8 lg:grid-cols-12">
 
       {/* Map Display Column (5 cols on Desktop) */}
-      <div id="interactive-map-container" className="lg:col-span-5 h-[450px] lg:h-[640px] relative">
+      <div id="interactive-map-container" className="lg:col-span-5 h-[450px] lg:h-[calc(100vh-140px)] lg:max-h-[600px] relative lg:sticky lg:top-20 self-start">
         <LeafletMap
           umkmList={filteredList}
           activeCenter={mapCenter}

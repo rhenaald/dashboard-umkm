@@ -1,4 +1,7 @@
 import React from 'react';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { verifySession } from '@/app/utils/auth';
 import { getAllUmkm } from '@/app/utils/db';
 import MonitoringClient from '@/components/MonitoringClient';
 
@@ -8,6 +11,12 @@ export const metadata = {
 };
 
 export default async function MonitoringPage() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    redirect('/login?from=/monitoring');
+  }
+
   const allUmkm = await getAllUmkm();
 
   return (

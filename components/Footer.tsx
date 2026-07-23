@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { 
+import {
   Store, Mail, Phone, MapPin, Heart, ArrowUp, Info, HelpCircle
 } from 'lucide-react';
 
@@ -58,15 +58,15 @@ export default function Footer() {
 
   return (
     <footer className="w-full border-t border-warm-brown-200/60 bg-gradient-to-b from-warm-brown-50 to-warm-brown-100/90 text-warm-brown-900 transition-colors duration-300 dark:border-warm-brown-850/50 dark:from-warm-brown-950 dark:to-warm-brown-950/95 dark:text-warm-brown-100">
-      
+
       {/* Top Banner Accent */}
       <div className="h-1.5 w-full bg-gradient-to-r from-warm-brown-500 via-warm-brown-700 to-warm-brown-600"></div>
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4 lg:gap-12">
-          
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:gap-12">
+
           {/* Column 1: Brand & Logo */}
-          <div className="space-y-4 md:col-span-1">
+          <div className="space-y-4 col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 group">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-warm-brown-700 text-warm-brown-50 shadow-md group-hover:bg-warm-brown-850 dark:bg-warm-brown-800 dark:group-hover:bg-warm-brown-700 transition-all duration-300 transform group-hover:rotate-6">
                 <Store size={24} />
@@ -101,7 +101,7 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Navigation Links */}
-          <div className="space-y-4">
+          <div className="space-y-4 col-span-1 md:col-span-1">
             <h3 className="text-sm font-bold uppercase tracking-wider text-warm-brown-800 dark:text-warm-brown-200">
               Peta Situs
             </h3>
@@ -114,7 +114,7 @@ export default function Footer() {
                 { name: 'Monitoring Desil', href: '/monitoring' }
               ].map((link) => (
                 <li key={link.href}>
-                  <Link 
+                  <Link
                     href={link.href}
                     className="text-warm-brown-600 hover:text-warm-brown-900 dark:text-warm-brown-300 dark:hover:text-warm-brown-100 transition-colors duration-200 flex items-center gap-1.5 group"
                   >
@@ -127,7 +127,7 @@ export default function Footer() {
           </div>
 
           {/* Column 3: Quick Info / Support */}
-          <div className="space-y-4">
+          <div className="space-y-4 col-span-1 md:col-span-1">
             <h3 className="text-sm font-bold uppercase tracking-wider text-warm-brown-800 dark:text-warm-brown-200">
               Layanan Publik
             </h3>
@@ -165,7 +165,7 @@ export default function Footer() {
           </div>
 
           {/* Column 4: Contact & Office */}
-          <div className="space-y-4">
+          <div className="space-y-4 col-span-2 md:col-span-1">
             <h3 className="text-sm font-bold uppercase tracking-wider text-warm-brown-800 dark:text-warm-brown-200">
               Hubungi Kami
             </h3>
@@ -200,7 +200,7 @@ export default function Footer() {
               Pemerintah Kota Tasikmalaya (Kecamatan Tawang & Cihideung)
             </p>
           </div>
-          
+
           <div className="flex items-center gap-4">
             {/* Made with love */}
             <div className="flex items-center gap-1.5 text-xs text-warm-brown-600 dark:text-warm-brown-400">

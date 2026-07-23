@@ -1,5 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllUmkm, createUmkm, deleteUmkm, updateUmkm } from '@/app/utils/db';
+import { verifySession } from '@/app/utils/auth';
+import { z } from 'zod';
+
+// Input Validation Schemas
+const createUmkmSchema = z.object({
+  nama: z.string().max(100).optional().default(''),
+  nama_usaha: z.string().min(1, 'Nama usaha wajib diisi').max(255),
+  produk: z.string().max(255).optional().default(''),
+  kategori: z.string().max(100).optional().default('Perdagangan'),
+  alamat: z.string().max(255).optional().default(''),
+  rt: z.coerce.number().int().min(0).max(999).optional().default(0),
+  rw: z.coerce.number().int().min(0).max(999).optional().default(0),
+  status_nib: z.string().max(50).optional().default(''),
+  status_pelatihan: z.string().max(50).optional().default(''),
+  desil: z.coerce.number().int().min(0).max(10).optional().default(0),
+  status_validasi: z.string().max(50).optional().default(''),
+  kecamatan: z.string().max(100).optional().default('Tawang'),
+  tahun_laporan: z.coerce.number().int().min(1900).max(2100).optional().default(2026),
+  latitude: z.coerce.number().min(-90).max(90).optional().default(-7.335),
+  longitude: z.coerce.number().min(-180).max(180).optional().default(108.222),
+  url: z.string().max(500).optional().default(''),
+});
+
+const updateValidationSchema = z.object({
+  id: z.coerce.number().int().positive('ID harus berupa angka bulat positif'),
+  type: z.literal('validasi'),
+  status: z.enum(['Cek Lapangan', 'Perlu Cek']),
+});
+
+const updateNibSchema = z.object({
+  id: z.coerce.number().int().positive('ID harus berupa angka bulat positif'),
+  type: z.literal('nib'),
+  status: z.enum(['Sudah NIB', 'Belum NIB']),
+});
+
+const updateGeneralSchema = createUmkmSchema.partial().extend({
+  id: z.coerce.number().int().positive('ID harus berupa angka bulat positif'),
+});
 
 // Read all (GET)
 export async function GET(request: NextRequest) {
@@ -35,43 +73,38 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  // Optional pagination parameters
+  const limitParam = searchParams.get('limit');
+  const pageParam = searchParams.get('page');
+
+  if (limitParam) {
+    const limit = parseInt(limitParam, 10);
+    const page = parseInt(pageParam || '1', 10);
+    if (!isNaN(limit) && limit > 0) {
+      const pageIndex = isNaN(page) || page < 1 ? 0 : page - 1;
+      const start = pageIndex * limit;
+      list = list.slice(start, start + limit);
+    }
+  }
+
   return NextResponse.json(list);
 }
 
 // Create new (POST)
 export async function POST(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
-    const { 
-      nama, nama_usaha, produk, kategori, alamat, rt, rw, 
-      status_nib, status_pelatihan, desil, status_validasi, 
-      kecamatan, tahun_laporan, latitude, longitude, url
-    } = body;
-
-    // Only nama_usaha is strictly required
-    if (!nama_usaha) {
-      return NextResponse.json({ error: 'Nama usaha wajib diisi' }, { status: 400 });
+    const result = createUmkmSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json({ error: 'Data tidak valid', details: result.error.flatten().fieldErrors }, { status: 400 });
     }
 
-    const created = await createUmkm({
-      nama: nama || '',
-      nama_usaha,
-      produk: produk || '',
-      kategori: kategori || 'Perdagangan',
-      alamat: alamat || '',
-      rt: rt !== undefined && rt !== null ? Number(rt) : 0,
-      rw: rw !== undefined && rw !== null ? Number(rw) : 0,
-      status_nib: status_nib || '',
-      status_pelatihan: status_pelatihan || '',
-      desil: desil !== undefined && desil !== null ? Number(desil) : 0,
-      status_validasi: status_validasi || '',
-      kecamatan: kecamatan || 'Tawang',
-      tahun_laporan: tahun_laporan !== undefined && tahun_laporan !== null ? Number(tahun_laporan) : 2026,
-      latitude: latitude !== undefined && latitude !== null ? Number(latitude) : -7.335,
-      longitude: longitude !== undefined && longitude !== null ? Number(longitude) : 108.222,
-      url: url || ''
-    });
-
+    const created = await createUmkm(result.data);
     return NextResponse.json(created, { status: 201 });
   } catch (e) {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
@@ -80,9 +113,14 @@ export async function POST(request: NextRequest) {
 
 // Update existing (PUT)
 export async function PUT(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
-    const { id, type, status, ...fields } = body;
+    const { id, type } = body;
 
     if (!id) {
       return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
@@ -90,18 +128,24 @@ export async function PUT(request: NextRequest) {
 
     let updated = null;
     if (type === 'validasi') {
-      if (status !== 'Cek Lapangan' && status !== 'Perlu Cek') {
-        return NextResponse.json({ error: 'Invalid validation status' }, { status: 400 });
+      const result = updateValidationSchema.safeParse(body);
+      if (!result.success) {
+        return NextResponse.json({ error: 'Data tidak valid', details: result.error.flatten().fieldErrors }, { status: 400 });
       }
-      updated = await updateUmkm(Number(id), { status_validasi: status });
+      updated = await updateUmkm(result.data.id, { status_validasi: result.data.status });
     } else if (type === 'nib') {
-      if (status !== 'Sudah NIB' && status !== 'Belum NIB') {
-        return NextResponse.json({ error: 'Invalid NIB status' }, { status: 400 });
+      const result = updateNibSchema.safeParse(body);
+      if (!result.success) {
+        return NextResponse.json({ error: 'Data tidak valid', details: result.error.flatten().fieldErrors }, { status: 400 });
       }
-      updated = await updateUmkm(Number(id), { status_nib: status });
+      updated = await updateUmkm(result.data.id, { status_nib: result.data.status });
     } else {
-      // General updates
-      updated = await updateUmkm(Number(id), fields);
+      const result = updateGeneralSchema.safeParse(body);
+      if (!result.success) {
+        return NextResponse.json({ error: 'Data tidak valid', details: result.error.flatten().fieldErrors }, { status: 400 });
+      }
+      const { id: validatedId, ...fields } = result.data;
+      updated = await updateUmkm(validatedId, fields);
     }
 
     if (!updated) {
@@ -116,15 +160,21 @@ export async function PUT(request: NextRequest) {
 
 // Delete existing (DELETE)
 export async function DELETE(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
-    if (!id) {
-      return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
+    const idResult = z.coerce.number().int().positive().safeParse(id);
+    if (!idResult.success) {
+      return NextResponse.json({ error: 'Missing or invalid id parameter' }, { status: 400 });
     }
 
-    const success = await deleteUmkm(Number(id));
+    const success = await deleteUmkm(idResult.data);
     if (!success) {
       return NextResponse.json({ error: 'UMKM not found or failed to delete' }, { status: 404 });
     }
