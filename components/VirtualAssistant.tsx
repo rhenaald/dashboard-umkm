@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageSquare, X, Send, User, Bot, CheckCircle2, RotateCcw, ExternalLink } from 'lucide-react';
 
 interface ChatMessage {
@@ -160,6 +161,7 @@ function findMatchingRule(queryText: string): KnowledgeRule | null {
 }
 
 export default function VirtualAssistant() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -236,6 +238,8 @@ export default function VirtualAssistant() {
       }
     ]);
   };
+
+  if (pathname === '/login') return null;
 
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end font-sans">

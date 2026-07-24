@@ -102,6 +102,8 @@ export default function Navbar() {
     return true;
   });
 
+  if (pathname === '/login') return null;
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-warm-brown-200/50 bg-warm-brown-50/85 backdrop-blur-md dark:border-warm-brown-850/30 dark:bg-warm-brown-950/80 transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

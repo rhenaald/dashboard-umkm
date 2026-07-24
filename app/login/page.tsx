@@ -42,7 +42,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex-1 min-h-[calc(100vh-4rem)] flex items-center justify-center bg-warm-brown-100 py-12 px-4 sm:px-6 lg:px-8 dark:bg-warm-brown-950 transition-colors duration-300">
+    <div className="flex-1 min-h-screen flex items-center justify-center bg-warm-brown-100 py-12 px-4 sm:px-6 lg:px-8 dark:bg-warm-brown-950 transition-colors duration-300">
       <div className="max-w-md w-full space-y-8 bg-white border border-warm-brown-200/80 p-8 sm:p-10 rounded-3xl shadow-xl dark:bg-warm-brown-900 dark:border-warm-brown-850">
 
         {/* Brand Header */}
