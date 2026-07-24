@@ -472,7 +472,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                   <input
                     type="number"
                     required
-                    min={1}
+                    min={0}
                     value={rt}
                     onChange={(e) => setRt(Number(e.target.value))}
                     className="w-full rounded-xl border border-warm-brown-200 bg-white py-2 px-3 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"
@@ -483,7 +483,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                   <input
                     type="number"
                     required
-                    min={1}
+                    min={0}
                     value={rw}
                     onChange={(e) => setRw(Number(e.target.value))}
                     className="w-full rounded-xl border border-warm-brown-200 bg-white py-2 px-3 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-200"

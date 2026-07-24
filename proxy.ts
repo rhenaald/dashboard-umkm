@@ -15,14 +15,11 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  // Protect API mutation endpoints for /api/umkm
+  // Protect API endpoints for /api/umkm
   if (pathname.startsWith('/api/umkm')) {
-    const method = request.method;
-    if (method === 'POST' || method === 'PUT' || method === 'DELETE') {
-      const session = request.cookies.get('admin_session')?.value;
-      if (!session || !verifySession(session)) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
+    const session = request.cookies.get('admin_session')?.value;
+    if (!session || !verifySession(session)) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
   }
 

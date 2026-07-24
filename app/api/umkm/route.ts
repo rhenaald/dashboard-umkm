@@ -41,6 +41,11 @@ const updateGeneralSchema = createUmkmSchema.partial().extend({
 
 // Read all (GET)
 export async function GET(request: NextRequest) {
+  const session = request.cookies.get('admin_session')?.value;
+  if (!session || !verifySession(session)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const q = searchParams.get('q')?.toLowerCase() || '';
   const kategori = searchParams.get('kategori') || '';
