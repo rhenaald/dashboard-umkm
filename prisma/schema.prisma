@@ -1,32 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Umkm {
-  id               Int      @id @default(autoincrement())
-  nama             String?  @db.VarChar(100)
-  nama_usaha       String   @db.VarChar(255)
-  produk           String?  @db.VarChar(255)
-  kategori         String   @db.VarChar(100)
-  alamat           String?  @db.VarChar(255)
-  rt               Int      @default(0)
-  rw               Int      @default(0)
-  status_nib       String   @default("") @db.VarChar(50) // e.g., "Sudah NIB", "Belum NIB"
-  
-  // Extra columns to support dashboard metrics, mapping, and monitoring:
-  status_pelatihan String   @default("") @db.VarChar(50) // e.g., "Pernah", "Belum"
-  desil            Int      @default(0) // 1 to 10
-  status_validasi  String   @default("") @db.VarChar(50) // e.g., "Cek Lapangan", "Perlu Cek"
-  kecamatan        String   @default("Tawang") @db.VarChar(100) // e.g., "Tawang"
-  tahun_laporan    Int      @default(0) // e.g., 2024, 2025, 2026
-  latitude         Float    @default(-7.335) // For Leaflet map positioning
-  longitude        Float    @default(108.222) // For Leaflet map positioning
-  url              String?  @db.VarChar(500) // Google Maps Search & Place URL
+  id               Int     @id @default(autoincrement())
+  nama             String? @db.VarChar(100)
+  nama_usaha       String  @db.VarChar(255)
+  produk           String? @db.VarChar(255)
+  kategori         String  @db.VarChar(100)
+  alamat           String? @db.VarChar(255)
+  rt               Int     @default(0)
+  rw               Int     @default(0)
+  status_nib       String  @default("") @db.VarChar(50)
+  status_pelatihan String  @default("") @db.VarChar(50)
+  desil            Int     @default(0)
+  status_validasi  String  @default("") @db.VarChar(50)
+  kecamatan        String  @default("Tawang") @db.VarChar(100)
+  tahun_laporan    Int     @default(0)
+  latitude         Float   @default(-7.335)
+  longitude        Float   @default(108.222)
+  url              String? @db.VarChar(500)
 
   @@map("umkm")
 }
@@ -39,4 +37,10 @@ model Admin {
   createdAt DateTime @default(now())
 
   @@map("admin")
+}
+
+model playing_with_neon {
+  id    Int    @id @default(autoincrement())
+  name  String
+  value Float? @db.Real
 }

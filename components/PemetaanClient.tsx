@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Umkm } from '@/app/utils/mockData';
 import { MapPin, Search, ChevronLeft, ChevronRight, RefreshCw, Layers } from 'lucide-react';
 import CustomDropdown from './CustomDropdown';
@@ -26,8 +26,35 @@ interface PemetaanClientProps {
 }
 
 function MapContent({ initialUmkmList }: PemetaanClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
+
+  // Local state for the input typing (does not trigger instant server requests)
+  const [localSearch, setLocalSearch] = useState(query);
+
+  // Sync local search input if query changes from external sources (like Navbar search)
+  useEffect(() => {
+    setLocalSearch(query);
+  }, [query]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearch(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const params = new URLSearchParams(searchParams.toString());
+      const value = localSearch.trim();
+      if (value) {
+        params.set('q', value);
+      } else {
+        params.delete('q');
+      }
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+  };
 
   // Local state
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -160,34 +187,47 @@ function MapContent({ initialUmkmList }: PemetaanClientProps) {
       {/* Table & Controls Column (7 cols on Desktop) */}
       <div className="lg:col-span-7 flex flex-col justify-between">
 
-        {/* Filtering Options */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
-          <div className="flex flex-row items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <label className="text-xs font-bold text-warm-brown-600 dark:text-warm-brown-400 uppercase tracking-wide shrink-0">
-                Kecamatan:
-              </label>
-              <CustomDropdown
-                value={selectedKecamatan}
-                onChange={setSelectedKecamatan}
-                options={kecamatanOptions}
+        {/* Filtering & Search Options */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-xs">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <Search className="h-4.5 w-4.5 text-warm-brown-450 dark:text-warm-brown-500" />
+              </div>
+              <input
+                type="text"
+                placeholder="Cari UMKM / produk di peta..."
+                value={localSearch}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
+                className="w-full rounded-xl border border-warm-brown-200 bg-white/70 py-1.5 pl-9 pr-4 text-xs text-warm-brown-900 placeholder-warm-brown-450 focus:border-warm-brown-600 focus:bg-white focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900/50 dark:text-warm-brown-150 dark:placeholder-warm-brown-600 dark:focus:border-warm-brown-500 dark:focus:bg-warm-brown-900 transition-all duration-300 shadow-inner"
               />
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <label className="text-xs font-bold text-warm-brown-600 dark:text-warm-brown-400 uppercase tracking-wide shrink-0">
-                Kategori:
-              </label>
-              <CustomDropdown
-                value={selectedCategory}
-                onChange={setSelectedCategory}
-                options={kategoriOptions}
-              />
-            </div>
-          </div>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <label className="text-xs font-bold text-warm-brown-650 dark:text-warm-brown-400 uppercase tracking-wide shrink-0">
+                  Kecamatan:
+                </label>
+                <CustomDropdown
+                  value={selectedKecamatan}
+                  onChange={setSelectedKecamatan}
+                  options={kecamatanOptions}
+                />
+              </div>
 
-          <div className="text-xs text-warm-brown-500 dark:text-warm-brown-450 font-semibold text-right">
-            Menampilkan <span className="font-extrabold text-warm-brown-800 dark:text-warm-brown-200">{filteredList.length}</span> dari {initialUmkmList.length} UMKM
+              <div className="flex items-center gap-1.5">
+                <label className="text-xs font-bold text-warm-brown-650 dark:text-warm-brown-400 uppercase tracking-wide shrink-0">
+                  Kategori:
+                </label>
+                <CustomDropdown
+                  value={selectedCategory}
+                  onChange={setSelectedCategory}
+                  options={kategoriOptions}
+                />
+              </div>
+            </div>
           </div>
         </div>
 

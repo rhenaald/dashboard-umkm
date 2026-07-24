@@ -93,6 +93,37 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
     currentPage * ITEMS_PER_PAGE
   );
 
+  // Helper to generate page numbers with ellipses for smooth navigation
+  const getPaginationRange = () => {
+    const delta = 1; // Number of pages to show around current page
+    const range: (number | string)[] = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        range.push(i);
+      } else if (
+        i === currentPage - delta - 1 ||
+        i === currentPage + delta + 1
+      ) {
+        range.push('...');
+      }
+    }
+
+    const uniqueRange: (number | string)[] = [];
+    let last: number | string | null = null;
+    for (const item of range) {
+      if (item !== last) {
+        uniqueRange.push(item);
+      }
+      last = item;
+    }
+    return uniqueRange;
+  };
+
   // Open modal for Create
   const handleOpenCreate = () => {
     setModalMode('create');
@@ -368,18 +399,46 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
         <div className="text-xs text-warm-brown-600 dark:text-warm-brown-400 font-semibold">
           Halaman <span className="font-extrabold text-warm-brown-900 dark:text-warm-brown-200">{currentPage}</span> dari <span className="font-extrabold text-warm-brown-900 dark:text-warm-brown-200">{totalPages}</span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <button
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-warm-brown-200 bg-white text-warm-brown-700 hover:bg-warm-brown-50 disabled:opacity-40 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-300"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-warm-brown-200 bg-white text-warm-brown-700 hover:bg-warm-brown-50 disabled:opacity-40 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-300 cursor-pointer"
           >
             <ChevronLeft size={16} />
           </button>
+
+          {getPaginationRange().map((page, idx) => {
+            if (page === '...') {
+              return (
+                <span
+                  key={`ellipsis-${idx}`}
+                  className="px-1 py-1 text-xs font-bold text-warm-brown-400 dark:text-warm-brown-600 select-none"
+                >
+                  ...
+                </span>
+              );
+            }
+            const isPageActive = page === currentPage;
+            return (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page as number)}
+                className={`inline-flex h-8 min-w-[32px] px-2 items-center justify-center rounded-xl border text-xs font-bold transition-all shadow-xs cursor-pointer ${
+                  isPageActive
+                    ? 'bg-warm-brown-700 text-white border-warm-brown-700 dark:bg-warm-brown-800 dark:border-warm-brown-800'
+                    : 'border-warm-brown-200 bg-white text-warm-brown-700 hover:bg-warm-brown-50 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-300 dark:hover:bg-warm-brown-850'
+                }`}
+              >
+                {page}
+              </button>
+            );
+          })}
+
           <button
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-warm-brown-200 bg-white text-warm-brown-700 hover:bg-warm-brown-50 disabled:opacity-40 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-300"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-warm-brown-200 bg-white text-warm-brown-700 hover:bg-warm-brown-50 disabled:opacity-40 dark:border-warm-brown-800 dark:bg-warm-brown-900 dark:text-warm-brown-300 cursor-pointer"
           >
             <ChevronRight size={16} />
           </button>
