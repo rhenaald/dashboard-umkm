@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { Umkm } from '@/app/utils/mockData';
+import { Umkm } from '@/app/types/umkm';
 
 // Fix Leaflet marker icon asset resolution bug in Next.js
 import markerIcon from 'leaflet/dist/images/marker-icon.png';

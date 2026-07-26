@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { Umkm } from '@/app/utils/mockData';
+import { Umkm } from '@/app/types/umkm';
 import { MapPin, Search, ChevronLeft, ChevronRight, RefreshCw, Layers } from 'lucide-react';
 import CustomDropdown from './CustomDropdown';
 

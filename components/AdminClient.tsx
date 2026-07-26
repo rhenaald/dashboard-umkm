@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Umkm } from '@/app/utils/mockData';
+import { Umkm } from '@/app/types/umkm';
 import {
   Plus, Edit, Trash2, Search, Filter,
   X, Check, AlertTriangle, ShieldCheck,

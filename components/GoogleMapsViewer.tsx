@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { MapPin, ExternalLink, RefreshCw, Navigation, Building2 } from 'lucide-react';
-import { Umkm } from '@/app/utils/mockData';
+import { Umkm } from '@/app/types/umkm';
 
 interface GoogleMapsViewerProps {
   selectedUmkm: Umkm | null;

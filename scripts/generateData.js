@@ -3,7 +3,6 @@ const path = require('path');
 
 const tawangPath = path.join(__dirname, '../data/Tawang.json');
 const cihideungPath = path.join(__dirname, '../data/Cihideung.json');
-const mockDataPath = path.join(__dirname, '../app/utils/mockData.ts');
 const seedJsPath = path.join(__dirname, '../prisma/seed.js');
 
 const rawTawang = fs.existsSync(tawangPath) ? JSON.parse(fs.readFileSync(tawangPath, 'utf8')) : [];
@@ -97,34 +96,6 @@ const totalTawang = combinedDataset.filter(i => i.kecamatan === 'Tawang').length
 const totalCihideung = combinedDataset.filter(i => i.kecamatan === 'Cihideung').length;
 
 console.log(`Processed: Total ${combinedDataset.length} UMKM (Tawang: ${totalTawang}, Cihideung: ${totalCihideung})`);
-
-// Write to app/utils/mockData.ts
-const tsContent = `export interface Umkm {
-  id: number;
-  nama: string;
-  nama_usaha: string;
-  produk: string;
-  kategori: string;
-  alamat: string;
-  rt: number;
-  rw: number;
-  status_nib: string;
-  status_pelatihan: string;
-  desil: number;
-  status_validasi: string;
-  kecamatan: string;
-  tahun_laporan: number;
-  latitude: number;
-  longitude: number;
-  url?: string;
-}
-
-// Memory database loaded directly from Tawang.json and Cihideung.json datasets
-export let mockUmkmList: Umkm[] = ${JSON.stringify(combinedDataset, null, 2)};
-`;
-
-fs.writeFileSync(mockDataPath, tsContent, 'utf8');
-console.log(`Successfully written ${combinedDataset.length} items to ${mockDataPath}`);
 
 // Write to prisma/seed.js
 const seedContent = `const { PrismaClient } = require('@prisma/client');
