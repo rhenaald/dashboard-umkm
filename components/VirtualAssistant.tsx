@@ -2,7 +2,17 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { MessageSquare, X, Send, User, Bot, CheckCircle2, RotateCcw, ExternalLink } from 'lucide-react';
+import { MessageSquare, X, Send, User, Bot, CheckCircle2, RotateCcw, ExternalLink, Store } from 'lucide-react';
+
+interface UmkmRecommendation {
+  id: number;
+  nama_usaha: string;
+  produk: string | null;
+  kategori: string;
+  alamat: string | null;
+  kecamatan: string;
+  url: string | null;
+}
 
 interface ChatMessage {
   id: string;
@@ -10,6 +20,7 @@ interface ChatMessage {
   text: string;
   links?: { label: string; url: string }[];
   followups?: { label: string; query: string }[];
+  recommendations?: UmkmRecommendation[];
 }
 
 interface KnowledgeRule {
@@ -160,6 +171,132 @@ function findMatchingRule(queryText: string): KnowledgeRule | null {
   return maxScore >= 3 ? best : null;
 }
 
+interface CategoryRule {
+  kategoriDB: string;
+  label: string;
+  keywords: string[];
+  queryTerms: string[];
+}
+
+const CATEGORY_RULES: CategoryRule[] = [
+  {
+    kategoriDB: 'Kuliner',
+    label: 'Kuliner & Makanan',
+    keywords: ['kuliner', 'makanan', 'makan', 'enak', 'lezat', 'sedap', 'nikmat', 'warung', 'rumah makan', 'kedai', 'jajanan', 'snack', 'cemilan', 'kue', 'jajanan pasar'],
+    queryTerms: ['makanan']
+  },
+  {
+    kategoriDB: 'Kuliner',
+    label: 'Minuman',
+    keywords: ['minuman', 'minum', 'kopi', 'teh', 'es', 'jus', 'es campur', 'es doger', 'wedang', 'bandrek', 'bajigur', 'kopi susu', 'coffee'],
+    queryTerms: ['minuman']
+  },
+  {
+    kategoriDB: 'Kuliner',
+    label: 'Kuliner Khas (Soto, Baso, dll)',
+    keywords: ['soto', 'baso', 'bakso', 'mie ayam', 'mi ayam', 'nasi goreng', 'mie goreng', 'nasi uduk', 'nasi kuning', 'sate', 'sate ayam', 'sate kambing', 'nasi campur', 'kupat tahu', 'lotek', 'siomay', 'batagor', 'cilok', 'cireng', 'seblak', 'otel', 'emporan'],
+    queryTerms: ['soto', 'bakso', 'mie ayam']
+  },
+  {
+    kategoriDB: 'Fesyen',
+    label: 'Fashion & Busana',
+    keywords: ['fashion', 'fesyen', 'busana', 'pakaian', 'baju', 'kaos', 'kemeja', 'gamis', 'hijab', 'kerudung', 'jilbab', 'dress', 'rok', 'celana', 'konveksi', 'garmen', 'jahit', 'penjahit', 'butik', 'sarung', 'sablon'],
+    queryTerms: ['fashion', 'baju']
+  },
+  {
+    kategoriDB: 'Fesyen',
+    label: 'Bordir Tasik',
+    keywords: ['bordir', 'bordir tasik', 'sulam', 'sulaman', 'kebaya bordir', 'mukena bordir', 'tas bordir', 'baju bordir'],
+    queryTerms: ['bordir']
+  },
+  {
+    kategoriDB: 'Kerajinan',
+    label: 'Kerajinan & Handmade',
+    keywords: ['kerajinan', 'handmade', 'kerajinan tangan', 'souvenir', 'oleh-oleh', 'aksesoris', 'perhiasan', 'cenderamata', 'gift', 'kado'],
+    queryTerms: ['kerajinan']
+  },
+  {
+    kategoriDB: 'Kerajinan',
+    label: 'Kelom Geulis & Kayu',
+    keywords: ['kelom', 'kelom geulis', 'alas kaki kayu', 'ukir', 'ukiran', 'kayu', 'meubel', 'furniture', 'perabot', 'rak', 'lemari', 'kursi', 'meja'],
+    queryTerms: ['kelom', 'kayu']
+  },
+  {
+    kategoriDB: 'Jasa',
+    label: 'Jasa & Servis',
+    keywords: ['jasa', 'servis', 'service', 'reparasi', 'perbaikan', 'las', 'bengkel', 'potong rambut', 'salon', 'barbershop', 'cuci', 'laundry', 'sewa', 'rental', 'fotografi', 'foto', 'video', 'desain', 'percetakan', 'cetak'],
+    queryTerms: ['jasa']
+  },
+  {
+    kategoriDB: 'Jasa',
+    label: 'Foto & Dokumentasi',
+    keywords: ['foto', 'fotografi', 'fotographer', 'video', 'videografi', 'dokumentasi', 'prewedding', 'wedding', 'peluang', 'cetak foto', 'cetak', 'photo booth', 'studio foto'],
+    queryTerms: ['foto']
+  },
+  {
+    kategoriDB: 'Pertanian',
+    label: 'Pertanian & Pangan',
+    keywords: ['pertanian', 'pangan', 'olahan pangan', 'hasill tani', 'sayur', 'buah', 'pupuk', 'ternak', 'peternakan', 'ikan', 'lele', 'ayam', 'bebek', 'telur', 'madu', 'ikan asin', 'kerupuk', 'tepung', 'bumbu', 'rempah'],
+    queryTerms: ['pertanian', 'pangan']
+  }
+];
+
+function findCategoryFromQuery(queryText: string): { category: CategoryRule; searchTerm: string } | null {
+  const norm = queryText.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').trim();
+  if (!norm) return null;
+
+  let bestMatch: CategoryRule | null = null;
+  let bestScore = 0;
+  let matchedTerm = '';
+
+  for (const rule of CATEGORY_RULES) {
+    for (const kw of rule.keywords) {
+      let score = 0;
+      if (norm === kw) {
+        score = 20;
+      } else if (norm.includes(kw)) {
+        score = 15;
+      } else if (kw.includes(norm) && norm.length >= 3) {
+        score = 10;
+      } else {
+        const words = norm.split(/\s+/);
+        for (const w of words) {
+          if (w.length >= 3 && kw.includes(w)) {
+            score = Math.max(score, 5);
+          }
+        }
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = rule;
+        matchedTerm = kw;
+      }
+    }
+  }
+
+  if (bestScore >= 5 && bestMatch) {
+    const searchTerm = bestMatch.queryTerms[0] || matchedTerm;
+    return { category: bestMatch, searchTerm };
+  }
+  return null;
+}
+
+async function fetchRecommendations(searchTerm: string, kategori: string, limit = 5): Promise<UmkmRecommendation[]> {
+  try {
+    const params = new URLSearchParams();
+    if (kategori) params.set('kategori', kategori);
+    if (searchTerm) params.set('q', searchTerm);
+    params.set('limit', String(limit));
+
+    const res = await fetch(`/api/rekomendasi?${params.toString()}`);
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json.data || [];
+  } catch {
+    return [];
+  }
+}
+
 export default function VirtualAssistant() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -192,6 +329,39 @@ export default function VirtualAssistant() {
 
     setMessages(prev => [...prev, userMsg]);
     setIsTyping(true);
+
+    const categoryMatch = findCategoryFromQuery(queryText);
+
+    if (categoryMatch) {
+      const { category, searchTerm } = categoryMatch;
+      const catLabel = category.label;
+
+      fetchRecommendations(searchTerm, category.kategoriDB, 5).then(items => {
+        let text: string;
+        if (items.length > 0) {
+          const namaList = items.map(i => `• ${i.nama_usaha}${i.produk ? ' — ' + i.produk : ''}`).join('\n');
+          text = `Berikut rekomendasi UMKM kategori *${catLabel}* di Tasikmalaya:\n\n${namaList}\n\n📍 Total ${items.length} usaha ditemukan. Silakan lihat detail di Peta Interaktif untuk info lengkap & kontak pemilik.`;
+        } else {
+          text = `Maaf, belum ada data UMKM untuk kategori *${catLabel}* yang tercatat di database saat ini.\n\nSilakan kunjungi Peta Interaktif atau hubungi admin pendataan kelurahan untuk informasi lebih lanjut.`;
+        }
+
+        const botMsg: ChatMessage = {
+          id: `bot-${Date.now()}`,
+          sender: 'bot',
+          text,
+          recommendations: items.length > 0 ? items : undefined,
+          followups: [
+            { label: '📍 Lihat di Peta', query: 'peta umkm' },
+            { label: '🔍 Cari UMKM Lain', query: 'peta umkm' },
+            ...QUICK_PROMPTS.slice(0, 2)
+          ]
+        };
+
+        setIsTyping(false);
+        setMessages(prev => [...prev, botMsg]);
+      });
+      return;
+    }
 
     setTimeout(() => {
       const match = findMatchingRule(queryText);
@@ -285,15 +455,15 @@ export default function VirtualAssistant() {
                 className={`flex gap-2 max-w-[85%] ${msg.sender === 'user' ? 'ml-auto flex-row-reverse' : 'mr-auto'}`}
               >
                 <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[10px] flex-shrink-0 ${msg.sender === 'user'
-                    ? 'bg-warm-brown-700 text-white'
-                    : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-800 dark:text-warm-brown-200'
+                  ? 'bg-warm-brown-700 text-white'
+                  : 'bg-warm-brown-100 text-warm-brown-800 dark:bg-warm-brown-800 dark:text-warm-brown-200'
                   }`}>
                   {msg.sender === 'user' ? <User size={12} /> : <Bot size={12} />}
                 </div>
 
                 <div className={`rounded-xl px-3 py-2 text-xs leading-relaxed ${msg.sender === 'user'
-                    ? 'bg-warm-brown-700 text-white rounded-tr-none'
-                    : 'bg-white border border-warm-brown-200/70 text-warm-brown-900 rounded-tl-none dark:bg-warm-brown-900 dark:border-warm-brown-800 dark:text-warm-brown-100 shadow-2xs'
+                  ? 'bg-warm-brown-700 text-white rounded-tr-none'
+                  : 'bg-white border border-warm-brown-200/70 text-warm-brown-900 rounded-tl-none dark:bg-warm-brown-900 dark:border-warm-brown-800 dark:text-warm-brown-100 shadow-2xs'
                   }`}>
                   <p className="whitespace-pre-line">{msg.text}</p>
 
@@ -312,6 +482,39 @@ export default function VirtualAssistant() {
                           <span>{link.label}</span>
                           <ExternalLink size={10} className="ml-auto opacity-60" />
                         </a>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* UMKM Recommendations */}
+                  {msg.recommendations && msg.recommendations.length > 0 && (
+                    <div className="mt-2 pt-2 border-t border-warm-brown-100 dark:border-warm-brown-800 flex flex-col gap-1.5">
+                      {msg.recommendations.map((rec) => (
+                        <div
+                          key={rec.id}
+                          className="bg-warm-brown-50 dark:bg-warm-brown-800 border border-warm-brown-200/60 dark:border-warm-brown-700 rounded-lg p-2 flex items-start gap-2"
+                        >
+                          {rec.url ? (
+                            <img
+                              src={rec.url}
+                              alt={rec.nama_usaha}
+                              className="h-9 w-9 rounded-md object-cover flex-shrink-0 border border-warm-brown-200 dark:border-warm-brown-700"
+                            />
+                          ) : (
+                            <div className="h-9 w-9 rounded-md bg-warm-brown-200 dark:bg-warm-brown-700 flex items-center justify-center flex-shrink-0">
+                              <Store size={14} className="text-warm-brown-500 dark:text-warm-brown-300" />
+                            </div>
+                          )}
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[11px] font-bold text-warm-brown-900 dark:text-warm-brown-100 truncate">{rec.nama_usaha}</p>
+                            {rec.produk && (
+                              <p className="text-[10px] text-warm-brown-600 dark:text-warm-brown-400 truncate">{rec.produk}</p>
+                            )}
+                            <p className="text-[9px] text-warm-brown-400 dark:text-warm-brown-500 mt-0.5">
+                              {rec.alamat || rec.kecamatan}
+                            </p>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   )}
