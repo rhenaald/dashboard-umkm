@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { MessageSquare, X, Send, User, Bot, CheckCircle2, RotateCcw, ExternalLink, Store } from 'lucide-react';
+import { MessageSquare, X, Send, User, Bot, CheckCircle2, RotateCcw, ExternalLink, Store, Utensils, Shirt, Scissors, Wrench } from 'lucide-react';
 
 interface UmkmRecommendation {
   id: number;
@@ -241,9 +241,32 @@ const CATEGORY_RULES: CategoryRule[] = [
   }
 ];
 
-function findCategoryFromQuery(queryText: string): { category: CategoryRule; searchTerm: string } | null {
+function findCategoryFromQuery(queryText: string): { category?: CategoryRule; searchTerm: string } | null {
   const norm = queryText.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').trim();
   if (!norm) return null;
+
+  // Extract keyword after "rekomendasi", "cari", "tunjukkan", dsb.
+  const extractRegex = /(?:rekomendasi|rekomendasikan|cari|tunjukkan|temukan|daftar|list|info|recomended|recommendation|mana)\s+(?:untuk\s+|tentang\s+|di\s+|daerah\s+)?([a-z0-9\s-]+)/i;
+  const match = queryText.match(extractRegex);
+  let extractedTerm = '';
+  if (match && match[1]) {
+    extractedTerm = match[1].trim();
+  }
+
+  // If no pattern but the query is short (1-3 words), use the whole query
+  let searchTerm = extractedTerm;
+  if (!searchTerm) {
+    const words = norm.split(/\s+/);
+    if (words.length <= 3) {
+      searchTerm = norm;
+    }
+  }
+
+  if (!searchTerm) return null;
+
+  // Remove common filler words
+  searchTerm = searchTerm.replace(/^(di|pada|ke|yang|ada|dengan|dan|atau|umkm|usaha|bisnis)\s+/gi, '').trim();
+  if (searchTerm.length < 2) return null;
 
   let bestMatch: CategoryRule | null = null;
   let bestScore = 0;
@@ -252,19 +275,12 @@ function findCategoryFromQuery(queryText: string): { category: CategoryRule; sea
   for (const rule of CATEGORY_RULES) {
     for (const kw of rule.keywords) {
       let score = 0;
-      if (norm === kw) {
+      if (searchTerm === kw || norm === kw) {
         score = 20;
-      } else if (norm.includes(kw)) {
+      } else if (searchTerm.includes(kw) || norm.includes(kw)) {
         score = 15;
-      } else if (kw.includes(norm) && norm.length >= 3) {
+      } else if ((kw.includes(searchTerm) || kw.includes(norm)) && (searchTerm.length >= 3 || norm.length >= 3)) {
         score = 10;
-      } else {
-        const words = norm.split(/\s+/);
-        for (const w of words) {
-          if (w.length >= 3 && kw.includes(w)) {
-            score = Math.max(score, 5);
-          }
-        }
       }
       if (score > bestScore) {
         bestScore = score;
@@ -274,10 +290,16 @@ function findCategoryFromQuery(queryText: string): { category: CategoryRule; sea
     }
   }
 
+  // If we matched a category, return it with the dynamic searchTerm
   if (bestScore >= 5 && bestMatch) {
-    const searchTerm = bestMatch.queryTerms[0] || matchedTerm;
     return { category: bestMatch, searchTerm };
   }
+
+  // If no category matched but we explicitly wanted to recommend/find something, or the query is very short
+  if (extractedTerm || norm.split(/\s+/).length <= 2) {
+    return { searchTerm };
+  }
+
   return null;
 }
 
@@ -296,6 +318,24 @@ async function fetchRecommendations(searchTerm: string, kategori: string, limit 
     return [];
   }
 }
+
+const getCategoryIcon = (kategori: string) => {
+  const kat = (kategori || '').toLowerCase();
+  if (kat.includes('kuliner')) return <Utensils size={15} className="text-amber-600 dark:text-amber-400" />;
+  if (kat.includes('fesyen')) return <Shirt size={15} className="text-blue-600 dark:text-blue-400" />;
+  if (kat.includes('kerajinan')) return <Scissors size={15} className="text-purple-600 dark:text-purple-400" />;
+  if (kat.includes('jasa')) return <Wrench size={15} className="text-emerald-600 dark:text-emerald-400" />;
+  return <Store size={15} className="text-warm-brown-600 dark:text-warm-brown-400" />;
+};
+
+const getCategoryIconBg = (kategori: string) => {
+  const kat = (kategori || '').toLowerCase();
+  if (kat.includes('kuliner')) return 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-900/50';
+  if (kat.includes('fesyen')) return 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-900/50';
+  if (kat.includes('kerajinan')) return 'bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-900/50';
+  if (kat.includes('jasa')) return 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-900/50';
+  return 'bg-warm-brown-50 dark:bg-warm-brown-800 border-warm-brown-200 dark:border-warm-brown-700';
+};
 
 export default function VirtualAssistant() {
   const pathname = usePathname();
@@ -332,17 +372,25 @@ export default function VirtualAssistant() {
 
     const categoryMatch = findCategoryFromQuery(queryText);
 
-    if (categoryMatch) {
-      const { category, searchTerm } = categoryMatch;
-      const catLabel = category.label;
+    // Determine if we should prioritize recommendation search
+    // We prioritize it if we matched a search term and either:
+    // - The user explicitly used words like "rekomendasi" / "cari", or
+    // - We do not have an exact matching knowledge base rule
+    const hasExplicitIntent = queryText.toLowerCase().includes('rekomendasi') || queryText.toLowerCase().includes('cari');
+    const kbMatch = findMatchingRule(queryText);
 
-      fetchRecommendations(searchTerm, category.kategoriDB, 5).then(items => {
+    if (categoryMatch && (hasExplicitIntent || !kbMatch)) {
+      const { category, searchTerm } = categoryMatch;
+      const catLabel = category ? category.label : 'UMKM';
+      const dbKategori = category ? category.kategoriDB : '';
+
+      fetchRecommendations(searchTerm, dbKategori, 5).then(items => {
         let text: string;
         if (items.length > 0) {
           const namaList = items.map(i => `• ${i.nama_usaha}${i.produk ? ' — ' + i.produk : ''}`).join('\n');
-          text = `Berikut rekomendasi UMKM kategori *${catLabel}* di Tasikmalaya:\n\n${namaList}\n\n📍 Total ${items.length} usaha ditemukan. Silakan lihat detail di Peta Interaktif untuk info lengkap & kontak pemilik.`;
+          text = `Berikut rekomendasi *${searchTerm}* (${catLabel}) di Tasikmalaya:\n\n${namaList}\n\n📍 Total ${items.length} usaha ditemukan. Silakan klik kartu rekomendasi di bawah ini untuk melihat lokasinya di peta!`;
         } else {
-          text = `Maaf, belum ada data UMKM untuk kategori *${catLabel}* yang tercatat di database saat ini.\n\nSilakan kunjungi Peta Interaktif atau hubungi admin pendataan kelurahan untuk informasi lebih lanjut.`;
+          text = `Maaf, belum ada data UMKM untuk kata kunci *${searchTerm}* (${catLabel}) yang tercatat di database saat ini.\n\nSilakan kunjungi Peta Interaktif atau hubungi admin pendataan kelurahan untuk informasi lebih lanjut.`;
         }
 
         const botMsg: ChatMessage = {
@@ -415,7 +463,7 @@ export default function VirtualAssistant() {
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end font-sans">
       {/* Window Chat */}
       {isOpen && (
-        <div className="mb-3 w-[calc(100vw-2.5rem)] sm:w-80 sm:max-w-96 h-[460px] max-h-[80vh] bg-white dark:bg-warm-brown-900 border border-warm-brown-200 dark:border-warm-brown-800 rounded-2xl shadow-xl overflow-hidden flex flex-col transition-all duration-200">
+        <div className="mb-3 w-[calc(100vw-2rem)] sm:w-[400px] h-[580px] max-h-[85vh] bg-white dark:bg-warm-brown-900 border border-warm-brown-200 dark:border-warm-brown-800 rounded-2xl shadow-xl overflow-hidden flex flex-col transition-all duration-200">
 
           {/* Simple Header */}
           <div className="bg-warm-brown-800 text-white px-4 py-3 flex items-center justify-between shadow-sm">
@@ -489,33 +537,47 @@ export default function VirtualAssistant() {
                   {/* UMKM Recommendations */}
                   {msg.recommendations && msg.recommendations.length > 0 && (
                     <div className="mt-2 pt-2 border-t border-warm-brown-100 dark:border-warm-brown-800 flex flex-col gap-1.5">
-                      {msg.recommendations.map((rec) => (
-                        <div
-                          key={rec.id}
-                          className="bg-warm-brown-50 dark:bg-warm-brown-800 border border-warm-brown-200/60 dark:border-warm-brown-700 rounded-lg p-2 flex items-start gap-2"
-                        >
-                          {rec.url ? (
-                            <img
-                              src={rec.url}
-                              alt={rec.nama_usaha}
-                              className="h-9 w-9 rounded-md object-cover flex-shrink-0 border border-warm-brown-200 dark:border-warm-brown-700"
-                            />
-                          ) : (
-                            <div className="h-9 w-9 rounded-md bg-warm-brown-200 dark:bg-warm-brown-700 flex items-center justify-center flex-shrink-0">
-                              <Store size={14} className="text-warm-brown-500 dark:text-warm-brown-300" />
+                      {msg.recommendations.map((rec) => {
+                        const CardContent = (
+                          <>
+                            <div className={`h-9 w-9 rounded-md flex items-center justify-center flex-shrink-0 border ${getCategoryIconBg(rec.kategori)}`}>
+                              {getCategoryIcon(rec.kategori)}
                             </div>
-                          )}
-                          <div className="min-w-0 flex-1">
-                            <p className="text-[11px] font-bold text-warm-brown-900 dark:text-warm-brown-100 truncate">{rec.nama_usaha}</p>
-                            {rec.produk && (
-                              <p className="text-[10px] text-warm-brown-600 dark:text-warm-brown-400 truncate">{rec.produk}</p>
-                            )}
-                            <p className="text-[9px] text-warm-brown-400 dark:text-warm-brown-500 mt-0.5">
-                              {rec.alamat || rec.kecamatan}
-                            </p>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1">
+                                <p className="text-[11px] font-bold text-warm-brown-900 dark:text-warm-brown-100 truncate flex-1">{rec.nama_usaha}</p>
+                                {rec.url && <ExternalLink size={10} className="text-warm-brown-400 dark:text-warm-brown-500 group-hover:text-warm-brown-800 dark:group-hover:text-amber-400 transition-colors flex-shrink-0" />}
+                              </div>
+                              {rec.produk && (
+                                <p className="text-[10px] text-warm-brown-600 dark:text-warm-brown-400 truncate">{rec.produk}</p>
+                              )}
+                              <p className="text-[9px] text-warm-brown-400 dark:text-warm-brown-500 mt-0.5">
+                                {rec.alamat || rec.kecamatan}
+                              </p>
+                            </div>
+                          </>
+                        );
+
+                        return rec.url ? (
+                          <a
+                            key={rec.id}
+                            href={rec.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group bg-warm-brown-50 dark:bg-warm-brown-800/40 border border-warm-brown-200/60 dark:border-warm-brown-700/60 rounded-lg p-2 flex items-start gap-2 hover:bg-warm-brown-100/80 dark:hover:bg-warm-brown-800 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs"
+                            title="Lihat di Google Maps"
+                          >
+                            {CardContent}
+                          </a>
+                        ) : (
+                          <div
+                            key={rec.id}
+                            className="bg-warm-brown-50 dark:bg-warm-brown-800/40 border border-warm-brown-200/60 dark:border-warm-brown-700/60 rounded-lg p-2 flex items-start gap-2 shadow-2xs"
+                          >
+                            {CardContent}
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
 

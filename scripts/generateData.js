@@ -56,7 +56,7 @@ function processList(rawList, defaultKecamatan, startIdx) {
     const kategori = getKategori(catName, item.title);
     const alamatStr = item.street || item.address || '';
     const exactKecamatan = detectKecamatan(item, defaultKecamatan);
-    
+
     // Extract exact lat and lng from location object if available
     let lat = -7.3350;
     let lng = 108.2220;
@@ -112,7 +112,7 @@ async function main() {
   const defaultAdminUsername = 'admin';
   const salt = crypto.randomBytes(16).toString('hex');
   const hash = crypto.scryptSync('admin123', salt, 64).toString('hex');
-  const defaultAdminPassword = `scrypt$${salt}$${hash}`;
+  const defaultAdminPassword = \`scrypt\$\${salt}\$\${hash}\`;
 
   await prisma.admin.upsert({
     where: { username: defaultAdminUsername },
