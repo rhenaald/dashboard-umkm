@@ -31,7 +31,7 @@ export default function RootLayout({
 
         {/* Premium Footer */}
         <Footer />
-        <VirtualAssistant />
+        {/* {<VirtualAssistant />} */}
       </body>
     </html>
   );

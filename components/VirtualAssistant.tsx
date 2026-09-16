@@ -338,6 +338,7 @@ const getCategoryIconBg = (kategori: string) => {
 };
 
 export default function VirtualAssistant() {
+  return null;
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
