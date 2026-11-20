@@ -59,7 +59,7 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
   const desil1to4Count = filteredList.filter(item => item.desil !== null && item.desil !== undefined && item.desil >= 1 && item.desil <= 4).length;
   const desil1to5Count = filteredList.filter(item => item.desil !== null && item.desil !== undefined && item.desil >= 1 && item.desil <= 5).length;
   const desil6to10Count = filteredList.filter(item => item.desil !== null && item.desil !== undefined && item.desil >= 6 && item.desil <= 10).length;
-  const pendingValidationCount = filteredList.filter(item => item.status_validasi === 'Perlu Cek').length;
+  const pendingValidationCount = filteredList.filter(item => item.status_validasi === 'Harus Cek Lapangan' || item.status_validasi === 'Perlu Cek' || !item.status_validasi).length;
 
   // Build Desil 1-10 Chart Data
   const desilDistribution = Array.from({ length: 10 }, (_, i) => {
@@ -73,8 +73,9 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
   });
 
   // Handle Validasi Status Update (Real-time dynamic call)
-  const handleToggleValidasi = async (id: number, currentStatus: 'Cek Lapangan' | 'Perlu Cek') => {
-    const newStatus = currentStatus === 'Perlu Cek' ? 'Cek Lapangan' : 'Perlu Cek';
+  const handleToggleValidasi = async (id: number, currentStatus: string) => {
+    const isSudah = currentStatus === 'Sudah Cek Lapangan' || currentStatus === 'Cek Lapangan';
+    const newStatus = isSudah ? 'Harus Cek Lapangan' : 'Sudah Cek Lapangan';
     setUpdatingId(id);
 
     try {
@@ -328,28 +329,32 @@ export default function MonitoringClient({ initialUmkmList }: MonitoringClientPr
                         ) : '-'}
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold ${umkm.status_validasi === 'Cek Lapangan'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
-                            : 'bg-red-100 text-red-800 dark:bg-red-950/30 dark:text-red-300'
+                        <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                            (umkm.status_validasi === 'Sudah Cek Lapangan' || umkm.status_validasi === 'Cek Lapangan')
+                              ? 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-300'
+                              : 'bg-red-100 text-red-800 dark:bg-red-950/30 dark:text-red-300'
                           }`}>
-                          {umkm.status_validasi || '-'}
+                          {(umkm.status_validasi === 'Sudah Cek Lapangan' || umkm.status_validasi === 'Cek Lapangan')
+                            ? 'Sudah Cek Lapangan'
+                            : 'Harus Cek Lapangan'}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <button
-                          onClick={() => handleToggleValidasi(umkm.id, (umkm.status_validasi as 'Cek Lapangan' | 'Perlu Cek') || 'Perlu Cek')}
+                          onClick={() => handleToggleValidasi(umkm.id, umkm.status_validasi || 'Harus Cek Lapangan')}
                           disabled={updatingId === umkm.id}
-                          className={`rounded-lg px-2.5 py-1.5 text-[10px] font-extrabold border shadow-sm transition-colors ${umkm.status_validasi === 'Cek Lapangan'
-                              ? 'bg-white border-warm-brown-300 text-warm-brown-800 hover:bg-warm-brown-100 dark:bg-warm-brown-900 dark:border-warm-brown-800 dark:text-warm-brown-200 dark:hover:bg-warm-brown-850'
-                              : 'bg-warm-brown-700 border-warm-brown-800 text-white hover:bg-warm-brown-800 dark:bg-warm-brown-800 dark:border-warm-brown-900 dark:hover:bg-warm-brown-750'
+                          className={`rounded-lg px-2.5 py-1.5 text-[10px] font-extrabold border shadow-sm transition-colors ${
+                              (umkm.status_validasi === 'Sudah Cek Lapangan' || umkm.status_validasi === 'Cek Lapangan')
+                                ? 'bg-white border-warm-brown-300 text-warm-brown-800 hover:bg-warm-brown-100 dark:bg-warm-brown-900 dark:border-warm-brown-800 dark:text-warm-brown-200 dark:hover:bg-warm-brown-850'
+                                : 'bg-warm-brown-700 border-warm-brown-800 text-white hover:bg-warm-brown-800 dark:bg-warm-brown-800 dark:border-warm-brown-900 dark:hover:bg-warm-brown-750'
                             }`}
                         >
                           {updatingId === umkm.id ? (
                             <div className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent mx-auto"></div>
-                          ) : umkm.status_validasi === 'Cek Lapangan' ? (
-                            'Set Perlu Cek'
+                          ) : (umkm.status_validasi === 'Sudah Cek Lapangan' || umkm.status_validasi === 'Cek Lapangan') ? (
+                            'Set Harus Cek Lapangan'
                           ) : (
-                            'Set Cek Lapangan'
+                            'Set Sudah Cek Lapangan'
                           )}
                         </button>
                       </td>

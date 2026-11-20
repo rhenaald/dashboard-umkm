@@ -87,7 +87,7 @@ export async function updateUmkm(id: number, data: Partial<Umkm>): Promise<Umkm 
 }
 
 // Deprecated in favor of generic updateUmkm
-export async function updateValidasiStatus(id: number, status: 'Cek Lapangan' | 'Perlu Cek'): Promise<Umkm | null> {
+export async function updateValidasiStatus(id: number, status: 'Sudah Cek Lapangan' | 'Harus Cek Lapangan' | 'Cek Lapangan' | 'Perlu Cek'): Promise<Umkm | null> {
   return updateUmkm(id, { status_validasi: status });
 }
 

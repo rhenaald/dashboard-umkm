@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
-  Search,
   Menu,
   X,
   Store,
@@ -16,53 +15,6 @@ import {
   LogIn,
   LogOut,
 } from 'lucide-react';
-
-// Isolated search component that uses searchParams
-function NavbarSearch() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // Sync state with URL search param
-  useEffect(() => {
-    setSearchQuery(searchParams.get('q') || '');
-  }, [searchParams]);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (value) {
-      params.set('q', value);
-    } else {
-      params.delete('q');
-    }
-
-    // Update URL without jumping scroll
-    router.replace(`${pathname}?${params.toString()}`, {
-      scroll: false,
-    });
-  };
-
-  return (
-    <div className="flex-1 max-w-xs md:max-w-sm lg:max-w-xs relative">
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-        <Search className="h-4.5 w-4.5 text-warm-brown-450 dark:text-warm-brown-500" />
-      </div>
-
-      <input
-        type="text"
-        placeholder="Cari UMKM / produk..."
-        value={searchQuery}
-        onChange={handleSearchChange}
-        className="w-full rounded-xl border border-warm-brown-200 bg-white/70 py-1.5 pl-9 pr-4 text-sm text-warm-brown-900 placeholder-warm-brown-450 focus:border-warm-brown-600 focus:bg-white focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-900/50 dark:text-warm-brown-150 dark:placeholder-warm-brown-600 dark:focus:border-warm-brown-500 dark:focus:bg-warm-brown-900 transition-all duration-300 shadow-inner"
-      />
-    </div>
-  );
-}
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -204,15 +156,6 @@ export default function Navbar() {
               );
             })}
           </div>
-
-          {/* ==================== SEARCH ==================== */}
-          <Suspense
-            fallback={
-              <div className="flex-1 max-w-xs md:max-w-sm lg:max-w-xs h-8 bg-warm-brown-100/50 rounded-xl dark:bg-warm-brown-900/30 animate-pulse" />
-            }
-          >
-            <NavbarSearch />
-          </Suspense>
 
           {/* ==================== DESKTOP AUTH ==================== */}
           <div className="hidden lg:block">

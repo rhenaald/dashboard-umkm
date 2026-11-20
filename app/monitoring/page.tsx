@@ -32,7 +32,7 @@ export default async function MonitoringPage() {
             Monitoring Desil Pelaku Usaha
           </h1>
           <p className="mt-2 text-sm text-warm-brown-600 dark:text-warm-brown-400">
-            Pemantauan tingkat kesejahteraan ekonomi keluarga pelaku usaha mikro berdasarkan pengelompokan desil (Desil 1–10). Verifikasi data secara langsung melalui status Cek Lapangan di bawah ini.
+            Pemantauan tingkat kesejahteraan ekonomi keluarga pelaku usaha mikro berdasarkan pengelompokan desil (Desil 1–10). Verifikasi data secara langsung melalui status <strong>Sudah Cek Lapangan</strong> dan <strong>Harus Cek Lapangan</strong> di bawah ini.
           </p>
         </div>
 

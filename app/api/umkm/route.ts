@@ -26,7 +26,7 @@ const createUmkmSchema = z.object({
 const updateValidationSchema = z.object({
   id: z.coerce.number().int().positive('ID harus berupa angka bulat positif'),
   type: z.literal('validasi'),
-  status: z.enum(['Cek Lapangan', 'Perlu Cek']),
+  status: z.enum(['Sudah Cek Lapangan', 'Harus Cek Lapangan', 'Cek Lapangan', 'Perlu Cek']),
 });
 
 const updateNibSchema = z.object({

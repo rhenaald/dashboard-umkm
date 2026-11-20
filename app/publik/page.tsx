@@ -99,7 +99,7 @@ export default function LayananPublikPage() {
 
           {/* Help Card */}
           <a
-            href="http://www.laporinaja.my.id/"
+            href="https://siap.umkm.go.id/"
             target="_blank"
             rel="noopener noreferrer"
             className="group rounded-3xl border border-warm-brown-250 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 dark:border-warm-brown-850 dark:bg-warm-brown-900/60 flex items-start gap-4 flex-col justify-between"

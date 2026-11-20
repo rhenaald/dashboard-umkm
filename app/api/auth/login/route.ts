@@ -58,12 +58,15 @@ export async function POST(request: NextRequest) {
     // Generate secure signed session token
     const token = signSession(username);
 
+    const host = request.headers.get('host') || '';
+    const isLocalhost = host.includes('localhost') || host.includes('127.0.0.1');
+
     // Set admin_session HttpOnly cookie
     response.cookies.set({
       name: 'admin_session',
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production' && !isLocalhost,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24, // 24 hours
       path: '/'

@@ -49,7 +49,7 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
   const [statusNib, setStatusNib] = useState<'Sudah NIB' | 'Belum NIB'>('Belum NIB');
   const [statusPelatihan, setStatusPelatihan] = useState<'Pernah' | 'Belum'>('Belum');
   const [desil, setDesil] = useState(1);
-  const [statusValidasi, setStatusValidasi] = useState<'Cek Lapangan' | 'Perlu Cek'>('Perlu Cek');
+  const [statusValidasi, setStatusValidasi] = useState<'Sudah Cek Lapangan' | 'Harus Cek Lapangan' | 'Cek Lapangan' | 'Perlu Cek'>('Harus Cek Lapangan');
   const [kecamatan, setKecamatan] = useState('Tawang');
   const [tahunLaporan, setTahunLaporan] = useState(new Date().getFullYear());
   const [latitude, setLatitude] = useState(-7.335);
@@ -613,8 +613,8 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                     onChange={(e) => setStatusValidasi(e.target.value as any)}
                     className="w-full rounded-xl border border-warm-brown-200 bg-white py-2 px-3 focus:outline-none dark:border-warm-brown-800 dark:bg-warm-brown-950 dark:text-warm-brown-250 font-bold"
                   >
-                    <option value="Perlu Cek">Perlu Cek</option>
-                    <option value="Cek Lapangan">Selesai Cek (Lapangan)</option>
+                    <option value="Harus Cek Lapangan">Harus Cek Lapangan</option>
+                    <option value="Sudah Cek Lapangan">Sudah Cek Lapangan</option>
                   </select>
                 </div>
               </div>
@@ -715,8 +715,8 @@ export default function AdminClient({ initialUmkmList }: AdminClientProps) {
                     </span>
                   )}
                   {detailUmkm.status_validasi && (
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${detailUmkm.status_validasi === 'Cek Lapangan' ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'}`}>
-                      Status Validasi: {detailUmkm.status_validasi}
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${(detailUmkm.status_validasi === 'Sudah Cek Lapangan' || detailUmkm.status_validasi === 'Cek Lapangan') ? 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-950/40 dark:text-red-300'}`}>
+                      Status Validasi: {detailUmkm.status_validasi === 'Cek Lapangan' ? 'Sudah Cek Lapangan' : detailUmkm.status_validasi === 'Perlu Cek' ? 'Harus Cek Lapangan' : detailUmkm.status_validasi}
                     </span>
                   )}
                 </div>
